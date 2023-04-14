@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
+import { useContractKit } from '@celo/react-celo'
 import { ChainId as UbeswapChainId, JSBI, Pair, Token, TokenAmount } from '@ubeswap/sdk'
 import { useMemo } from 'react'
 

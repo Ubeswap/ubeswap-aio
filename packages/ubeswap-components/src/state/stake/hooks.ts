@@ -1,4 +1,4 @@
-import { ChainId, useContractKit } from '@celo-tools/use-contractkit'
+import { ChainId, useContractKit } from '@celo/react-celo'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId as UbeswapChainId, JSBI, Pair, Token, TokenAmount } from '@ubeswap/sdk'
 import zip from 'lodash/zip'

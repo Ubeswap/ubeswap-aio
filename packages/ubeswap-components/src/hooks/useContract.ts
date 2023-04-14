@@ -1,4 +1,4 @@
-import { useContractKit, useProvider } from '@celo-tools/use-contractkit'
+import { useContractKit, useProvider } from '@celo/react-celo'
 import { Contract } from '@ethersproject/contracts'
 import IUniswapV2PairABI from '@ubeswap/core/build/abi/IUniswapV2Pair.json'
 import { useMemo } from 'react'

@@ -23,7 +23,7 @@ import { UserRejectedRequestError, WalletConnectConnector } from "@web3-react/wa
 import { ArrowLeft } from "react-feather";
 
 import AlgebraConfig from "../../algebra.config";
-import { useContractKit } from "@celo-tools/use-contractkit";
+import { useContractKit } from "@celo/react-celo";
 
 const WALLET_VIEWS = {
     OPTIONS: "options",
