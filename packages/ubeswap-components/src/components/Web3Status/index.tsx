@@ -1,4 +1,4 @@
-import { useContractKit, WalletTypes } from '@celo-tools/use-contractkit'
+import { useContractKit, WalletTypes } from '@celo/react-celo'
 import * as Sentry from '@sentry/react'
 import { darken, lighten } from 'polished'
 import React, { useEffect, useMemo } from 'react'

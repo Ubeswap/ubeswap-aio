@@ -1,6 +1,6 @@
 import 'rc-drawer/assets/index.css'
 
-import { ChainId, useContractKit, useProvider } from '@celo-tools/use-contractkit'
+import { ChainId, useContractKit, useProvider } from '@celo/react-celo'
 import { Web3Provider } from '@ethersproject/providers'
 import { CELO, ChainId as UbeswapChainId, TokenAmount } from '@ubeswap/sdk'
 import Hamburger from 'hamburger-react'
