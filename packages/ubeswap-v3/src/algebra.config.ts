@@ -75,7 +75,7 @@ export default {
     },
 
     SUBGRAPH: {
-        infoURL: "https://api.thegraph.com/subgraphs/name/ubeswap/algebra",
+        infoURL: "https://api.thegraph.com/subgraphs/name/iliaazhel/ubeswap",
         farmingURL: "https://api.thegraph.com/subgraphs/name/ubeswap/algebrafarming",
         blocklyticsURL: "https://api.thegraph.com/subgraphs/name/ubeswap/celo-blocks",
     },
