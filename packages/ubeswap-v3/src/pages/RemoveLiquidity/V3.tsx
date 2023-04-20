@@ -348,12 +348,12 @@ function Remove({ tokenId }: { tokenId: BigNumber }) {
                             </AutoColumn>
                         </Card>
 
-                        {showCollectAsWeth && (
+                        {/* {showCollectAsWeth && (
                             <RowBetween>
                                 <TYPE.main>Collect as WDOGE</TYPE.main>
                                 <Toggle id="receive-as-weth" isActive={receiveWETH} toggle={() => setReceiveWETH((receiveWETH) => !receiveWETH)} />
                             </RowBetween>
-                        )}
+                        )} */}
 
                         <div style={{ display: "flex" }}>
                             <AutoColumn gap="12px" style={{ flex: "1" }}>
