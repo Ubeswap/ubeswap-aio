@@ -1,4 +1,4 @@
-import { useContractKit, useGetConnectedSigner } from '@celo/react-celo'
+import { useContractKit, useGetConnectedSigner } from '@celo-tools/use-contractkit'
 import { MaxUint256 } from '@ethersproject/constants'
 import { TokenAmount, Trade } from '@ubeswap/sdk'
 import { useDoTransaction } from 'components/swap/routing'

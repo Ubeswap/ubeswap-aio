@@ -15,7 +15,7 @@ import { FormattedRewardInterface, Reward } from "../../models/interfaces";
 import Card from "../../shared/components/Card/Card";
 import Menu from "../../components/Menu";
 import { useAppSelector } from "../../state/hooks";
-import { useContractKit } from "@celo/react-celo";
+import { useContractKit } from "@celo-tools/use-contractkit";
 // import { t, Trans } from "@lingui/macro";
 
 export const InfinityIcon = forwardRef(({ color = "currentColor", size = 18, ...rest }: { color?: string; size: number }, ref: any) => {

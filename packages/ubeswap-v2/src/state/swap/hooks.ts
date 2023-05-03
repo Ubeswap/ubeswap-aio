@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { parseUnits } from '@ethersproject/units'
 import { CELO, cEUR, ChainId as UbeswapChainId, cUSD, JSBI, Token, TokenAmount, Trade } from '@ubeswap/sdk'
 import { useMinimaTrade, useUbeswapTradeExactIn, useUbeswapTradeExactOut } from 'components/swap/routing/hooks/useTrade'

@@ -1,5 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
-import { ChainId } from '@ubeswap/sdk'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { ButtonError } from 'components/Button'
 import { SearchInput } from 'components/SearchModal/styleds'
 import { useDoTransaction } from 'components/swap/routing'
@@ -37,7 +36,7 @@ export default function ChangeDelegateModal({ isOpen, onDismiss }: ChangeDelegat
   const [delegateAddress, setDelegateAddress] = useState<string>('')
   const [error, setError] = useState<string | undefined>('ChangeDelegate')
 
-  const romulusAddress = ubeGovernanceAddresses[network.chainId as ChainId]
+  const romulusAddress = ubeGovernanceAddresses[network.chainId]
   const { tokenAddress } = useRomulusInfo(romulusAddress)
   const c = usePoofTokenContract(tokenAddress)
   const doTransaction = useDoTransaction()

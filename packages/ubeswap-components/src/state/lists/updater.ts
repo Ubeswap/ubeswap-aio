@@ -1,4 +1,4 @@
-import { useProvider } from '@celo/react-celo'
+import { useProvider } from '@celo-tools/use-contractkit'
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 

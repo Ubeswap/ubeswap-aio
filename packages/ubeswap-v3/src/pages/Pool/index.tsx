@@ -18,7 +18,7 @@ import "./index.scss";
 import usePrevious, { usePreviousNonEmptyArray } from "../../hooks/usePrevious";
 import { EthereumWindow } from "models/types";
 import { useShowNewestPosition } from "../../state/mint/v3/hooks";
-import { useContractKit } from "@celo/react-celo";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export default function Pool() {
     const { account, chainId } = useActiveWeb3React();

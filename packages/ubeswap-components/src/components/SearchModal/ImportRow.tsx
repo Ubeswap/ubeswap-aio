@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { Token } from '@ubeswap/sdk'
 import { ButtonPrimary } from 'components/Button'
 import { AutoColumn } from 'components/Column'
