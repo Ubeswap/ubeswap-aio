@@ -1,9 +1,9 @@
 import '../i18n'
-import '@celo/react-celo/lib/styles.css'
+import '@celo-tools/use-contractkit/lib/styles.css'
 import '../index.css'
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import { ContractKitProvider } from '@celo/react-celo'
+import { ContractKitProvider } from '@celo-tools/use-contractkit'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { ChainId } from '@ubeswap/sdk'
