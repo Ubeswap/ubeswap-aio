@@ -75,7 +75,6 @@ export default function FarmMenuGroup() {
             V2
           </MenuItem>
           <MenuItem
-            className="disabled"
             id="link"
             to={'#'}
             onClick={(e) => {
