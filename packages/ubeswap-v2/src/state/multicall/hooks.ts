@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { FunctionFragment, Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'

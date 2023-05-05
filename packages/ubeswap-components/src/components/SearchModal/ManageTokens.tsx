@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { ChainId, Token } from '@ubeswap/sdk'
 import Card from 'components/Card'
 import Column from 'components/Column'

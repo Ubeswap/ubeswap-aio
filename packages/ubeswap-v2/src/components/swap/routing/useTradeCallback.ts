@@ -1,4 +1,4 @@
-import { useContractKit, useProvider } from '@celo/react-celo'
+import { useContractKit, useProvider } from '@celo-tools/use-contractkit'
 import { ChainId, Trade } from '@ubeswap/sdk'
 import useENS from 'hooks/useENS'
 import { SwapCallbackState, useSwapCallback } from 'hooks/useSwapCallback'

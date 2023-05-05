@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { Interface } from '@ethersproject/abi'
 import partition from 'lodash/partition'
 import { FarmSummary } from 'pages/Earn/useFarmRegistry'

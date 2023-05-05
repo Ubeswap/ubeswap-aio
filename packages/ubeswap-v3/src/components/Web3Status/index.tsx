@@ -1,4 +1,4 @@
-import { useContractKit } from "@celo/react-celo";
+import { useContractKit } from "@celo-tools/use-contractkit";
 import { useWeb3React } from "@web3-react/core";
 import { NetworkContextName } from "../../constants/misc";
 import useENSName from "../../hooks/useENSName";
