@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { TokenAmount } from '@ubeswap/sdk'
 import { useDoTransaction } from 'components/swap/routing'
 import zip from 'lodash/zip'

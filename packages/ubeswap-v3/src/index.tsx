@@ -21,7 +21,7 @@ import UserUpdater from "./state/user/updater";
 import ThemeProvider, { ThemedGlobalStyle } from "./theme";
 import getLibrary from "./utils/getLibrary";
 import "@fontsource/montserrat";
-import { ContractKitProvider } from "@celo/react-celo";
+import { ContractKitProvider } from "@celo-tools/use-contractkit";
 import GasUpdater from "./state/application/gasUpdater";
 import "./assets/styles/index.scss";
 

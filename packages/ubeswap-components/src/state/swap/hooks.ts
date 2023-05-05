@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { parseUnits } from '@ethersproject/units'
 import { ChainId as UbeswapChainId, cUSD, JSBI, Token, TokenAmount } from '@ubeswap/sdk'
 import { ParsedQs } from 'qs'

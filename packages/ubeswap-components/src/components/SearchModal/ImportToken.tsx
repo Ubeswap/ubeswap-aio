@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo/react-celo'
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { ChainId, Token } from '@ubeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { transparentize } from 'polished'

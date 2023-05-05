@@ -1,4 +1,4 @@
-import { useContractKit, useProvider } from '@celo/react-celo'
+import { useContractKit, useProvider } from '@celo-tools/use-contractkit'
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
 import { CELO, ChainId as UbeswapChainId, Token, TokenAmount } from '@ubeswap/sdk'
 import { useDoTransaction } from 'components/swap/routing'

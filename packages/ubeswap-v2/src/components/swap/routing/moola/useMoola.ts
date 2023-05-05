@@ -1,5 +1,5 @@
 import { CeloContract } from '@celo/contractkit'
-import { useContractKit, useProvider } from '@celo/react-celo'
+import { useContractKit, useProvider } from '@celo-tools/use-contractkit'
 import { CELO, ChainId, cREAL, currencyEquals, cUSD, Token } from '@ubeswap/sdk'
 import { CEUR, MCELO, MCEUR, MCREAL, MCUSD } from 'constants/index'
 import { useMemo } from 'react'

@@ -1,5 +1,5 @@
 import { AccountsWrapper } from '@celo/contractkit/lib/wrappers/Accounts'
-import { useContractKit, useProvider } from '@celo/react-celo'
+import { useContractKit, useProvider } from '@celo-tools/use-contractkit'
 import ENS from '@ensdomains/ensjs'
 import { useEffect, useState } from 'react'
 
