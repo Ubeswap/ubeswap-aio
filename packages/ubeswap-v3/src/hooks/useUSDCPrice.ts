@@ -11,7 +11,7 @@ import { STABLE_TOKEN_FOR_USD_PRICE } from "../constants/tokens";
 // Two different consts used as a hack for allLiquidity flag in useUSDCPrice fn.
 // Doing another way makes amounts in EnterAmount stuck somehow.
 const STABLECOIN_AMOUNT_OUT_ALL: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(STABLE_TOKEN_FOR_USD_PRICE, 1);
-const STABLECOIN_AMOUNT_OUT_FILTERED: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(STABLE_TOKEN_FOR_USD_PRICE, 100_000e1);
+const STABLECOIN_AMOUNT_OUT_FILTERED: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(STABLE_TOKEN_FOR_USD_PRICE, 1);
 
 /**
  * Returns the price in USDC of the input currency
