@@ -402,12 +402,12 @@ export default function PositionPage({
                                         <span>{feeValueLower ? formatCurrencyAmount(feeValueLower, 4) : "-"}</span>
                                     </div>
                                 </Card>
-                                {showCollectAsWeth && (
+                                {/* {showCollectAsWeth && (
                                     <div className={"flex-s-between mt-075"}>
                                         Collect as WDOGE
                                         <Toggle id="receive-as-weth" isActive={receiveWETH} toggle={() => setReceiveWETH((receiveWETH) => !receiveWETH)} />
                                     </div>
-                                )}
+                                )} */}
                             </Card>
                             <Card isDark={false} classes={"p-1 br-12"}>
                                 <div className={"flex-s-between mb-1 fs-085"}>
