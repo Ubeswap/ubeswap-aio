@@ -30,12 +30,14 @@ export default function PositionCardBodyStat({ rewardToken, earned, bonusRewardT
         <div className={"f c mxs_fd-c p-1 br-8 mb-1"} style={{ backgroundColor: "var(--ebony-clay)" }}>
             <h3 className={"fs-075 mb-1 ms_mb-0 mxs_mb-0"}>Earned rewards</h3>
             <div className="f ms_fd-c mxs_fd-c">
-                {rewardList.map((reward: any, i) => (
-                    <div key={i} className={"f f-ac mr-1 mxs_mr-0 mxs_mt-1 mxs_mb-0 ms_mr-0 ms_mt-1 ms_mb-0 position-card-body-stat"}>
-                        <CurrencyLogo size={"30px"} currency={new Token(AlgebraConfig.CHAIN_PARAMS.chainId, reward.token.id, 18, reward.token.symbol) as WrappedCurrency} />
-                        <div className="ml-05" title={reward.amount.toString()}>{`${formatReward(reward.amount)} ${reward.token.symbol}`}</div>
-                    </div>
-                ))}
+                {rewardList
+                    .filter((reward: any) => reward.token.name !== "unknown" && reward.token.symbol !== "unknown")
+                    .map((reward: any, i) => (
+                        <div key={i} className={"f f-ac mr-1 mxs_mr-0 mxs_mt-1 mxs_mb-0 ms_mr-0 ms_mt-1 ms_mb-0 position-card-body-stat"}>
+                            <CurrencyLogo size={"30px"} currency={new Token(AlgebraConfig.CHAIN_PARAMS.chainId, reward.token.id, 18, reward.token.symbol) as WrappedCurrency} />
+                            <div className="ml-05" title={reward.amount.toString()}>{`${formatReward(reward.amount)} ${reward.token.symbol}`}</div>
+                        </div>
+                    ))}
             </div>
         </div>
     );
