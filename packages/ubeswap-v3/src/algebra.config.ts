@@ -89,8 +89,8 @@ export default {
     },
 
     MISC: {
-        title: "Dogechain",
-        description: "Swap and provide liquidity on Dogechain",
+        title: "Ubeswap",
+        description: "Swap and provide liquidity on Ubeswap",
         appURL: "dogechain.quickswap.exchange",
     },
 };
