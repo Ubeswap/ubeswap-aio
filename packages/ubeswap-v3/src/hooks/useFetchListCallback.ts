@@ -10,18 +10,13 @@ import resolveENSContentHash from "../utils/resolveENSContentHash";
 
 export function useFetchListCallback(): (listUrl: string, sendDispatch?: boolean) => Promise<TokenList> {
     const dispatch = useAppDispatch();
-    const { address: account, network } = useContractKit();
+    const { network } = useContractKit();
     const { chainId } = network;
     const library = useProvider();
 
     const ensResolver = useCallback(
         async (ensName: string) => {
             if (!library) {
-                const networkLibrary = getNetworkLibrary();
-                const network = await networkLibrary.getNetwork();
-                if (networkLibrary && network.chainId === 1) {
-                    return resolveENSContentHash(ensName, networkLibrary);
-                }
                 throw new Error("Could not construct mainnet ENS resolver");
             }
             return resolveENSContentHash(ensName, library);

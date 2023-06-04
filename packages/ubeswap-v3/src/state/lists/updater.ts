@@ -7,11 +7,9 @@ import { useCallback, useEffect } from "react";
 import { useAppDispatch } from "../../state/hooks";
 import { acceptListUpdate } from "./actions";
 import { useActiveListUrls, useAllLists } from "./hooks";
-import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
+import { useProvider } from "@celo-tools/use-contractkit";
 
 export default function Updater(): null {
-    const { address: account, network } = useContractKit();
-    const { chainId } = network;
     const library = useProvider();
     const dispatch = useAppDispatch();
     const isWindowVisible = useIsWindowVisible();
