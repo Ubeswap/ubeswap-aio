@@ -1,20 +1,20 @@
-import { useEffect, useRef } from 'react'
-import { useActiveWeb3React } from '../../hooks/web3'
-import Jazzicon from '@metamask/jazzicon'
-import { StyledIdenticonContainer } from './styled'
+import { useEffect, useRef } from "react";
+import Jazzicon from "@metamask/jazzicon";
+import { StyledIdenticonContainer } from "./styled";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export default function Identicon() {
-    const ref = useRef<HTMLDivElement>()
+    const ref = useRef<HTMLDivElement>();
 
-    const { account } = useActiveWeb3React()
+    const { address } = useContractKit();
 
     useEffect(() => {
-        if (account && ref.current) {
-            ref.current.innerHTML = ''
-            ref.current.appendChild(Jazzicon(16, parseInt(account.slice(2, 10), 16)))
+        if (address && ref.current) {
+            ref.current.innerHTML = "";
+            ref.current.appendChild(Jazzicon(16, parseInt(address.slice(2, 10), 16)));
         }
-    }, [account])
+    }, [address]);
 
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
-    return <StyledIdenticonContainer ref={ref as any} />
+    return <StyledIdenticonContainer ref={ref as any} />;
 }

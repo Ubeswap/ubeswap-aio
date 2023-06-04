@@ -1,5 +1,4 @@
 import CurrencyLogo from "../../components/CurrencyLogo";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { WrappedCurrency } from "models/types";
 import { useCallback, useMemo, useState } from "react";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
@@ -15,6 +14,7 @@ import ProfessorTierIcon from "../../assets/images/professor-tier-icon.png";
 // import { t, Trans } from "@lingui/macro";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 interface StakeModalFarmingTiersProps {
     tiersLimits: {
@@ -32,12 +32,12 @@ interface StakeModalFarmingTiersProps {
 }
 
 export default function StakeModalFarmingTiers({ tiersLimits, tiersMultipliers, selectTier, multiplierToken }: StakeModalFarmingTiersProps) {
-    const { account } = useActiveWeb3React();
+    const { address } = useContractKit();
 
     const [selectedTier, setSelectedTier] = useState<number | undefined>(0);
 
     const balance = useCurrencyBalance(
-        account ?? undefined,
+        address ?? undefined,
         new Token(AlgebraConfig.CHAIN_PARAMS.chainId, multiplierToken.id, +multiplierToken.decimals, multiplierToken.symbol, multiplierToken.name) ?? undefined
     );
     const _balance = useMemo(() => (!balance ? "" : balance.toSignificant(4)), [balance]);

@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import { supportedChainId } from "../../utils/supportedChainId";
 import useDebounce from "../../hooks/useDebounce";
 import useIsWindowVisible from "../../hooks/useIsWindowVisible";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { updateBlockNumber, updateChainId } from "./actions";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 function useQueryCacheInvalidator() {
     const chainId = useAppSelector((state) => state.application.chainId);
@@ -17,7 +17,9 @@ function useQueryCacheInvalidator() {
 }
 
 export default function Updater(): null {
-    const { library, chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
     const dispatch = useAppDispatch();
 
     const windowVisible = useIsWindowVisible();

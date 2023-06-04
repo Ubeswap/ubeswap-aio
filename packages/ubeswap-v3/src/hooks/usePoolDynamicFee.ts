@@ -1,16 +1,18 @@
 import { utils } from "ethers";
 import { useMemo } from "react";
-import { useActiveWeb3React } from "./web3";
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
+import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { updateDynamicFee } from "../state/mint/v3/actions";
 import { AppState } from "../state";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 export function useDynamicFeeValue() {
     return useAppSelector((state: AppState) => state.mintV3.dynamicFee);
 }
 
 export function usePoolDynamicFee(address: string) {
-    const { library, chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
 
     const dispatch = useAppDispatch();
 

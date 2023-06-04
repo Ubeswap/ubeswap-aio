@@ -1,6 +1,6 @@
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 import { useCallback, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { retry, RetryableError, RetryOptions } from "../../utils/retry";
 import { updateBlockNumber } from "../application/actions";
 import { useAddPopup, useBlockNumber } from "../application/hooks";
@@ -33,7 +33,9 @@ export function shouldCheck(lastBlockNumber: number, tx: TxInterface): boolean {
 const DEFAULT_RETRY_OPTIONS: RetryOptions = { n: 1, minWait: 0, maxWait: 0 };
 
 export default function Updater(): null {
-    const { chainId, library } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
 
     const lastBlockNumber = useBlockNumber();
 

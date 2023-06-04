@@ -15,7 +15,6 @@ import { RowBetween } from "../../components/Row";
 import { useUSDCValue } from "../../hooks/useUSDCPrice";
 import { calculateGasMargin } from "../../utils/calculateGasMargin";
 import { Review } from "./Review";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useCurrency } from "../../hooks/Tokens";
 import { ApprovalState, useApproveCallback } from "../../hooks/useApproveCallback";
 import useTransactionDeadline from "../../hooks/useTransactionDeadline";
@@ -43,6 +42,7 @@ import { useIsNetworkFailed } from "../../hooks/useIsNetworkFailed";
 import ReactGA from "react-ga";
 import { WrappedCurrency } from "../../models/types";
 import Card from "../../shared/components/Card/Card";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 const DEFAULT_ADD_IN_RANGE_SLIPPAGE_TOLERANCE = new Percent(50, 10_000);
 
@@ -52,7 +52,9 @@ export default function AddLiquidity({
     },
     history,
 }: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string; feeAmount?: string; tokenId?: string }>) {
-    const { account, chainId, library } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
     const theme = useContext(ThemeContext);
     const toggleWalletModal = useWalletModalToggle(); // toggle wallet when disconnected
     const expertMode = useIsExpertMode();

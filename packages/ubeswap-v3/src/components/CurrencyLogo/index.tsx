@@ -1,17 +1,16 @@
+import { ChainId } from "@ubeswap/sdk";
 import React from "react";
-// @ts-ignore
-import { useActiveWeb3React } from "../../hooks/web3";
-import { stringToColour } from "../../utils/stringToColour";
-import { specialTokens } from "./SpecialTokens";
-import { StyledImgLogo, StyledLogo } from "./styled";
 import { WrappedCurrency } from "../../models/types";
+import { StyledImgLogo } from "./styled";
 
+import { useContractKit } from "@celo-tools/use-contractkit";
 import AlgebraConfig from "../../algebra.config";
 
 export const getTokenLogoURL = (symbol: string) => `https://raw.githubusercontent.com/ubeswap/default-token-list/master/assets/asset_${symbol}.png`;
 
 export default function CurrencyLogo({ currency, size = "24px", style, fromList = false, ...rest }: { currency?: WrappedCurrency; size?: string; fromList?: boolean; style?: React.CSSProperties }) {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
 
     let logo;
 

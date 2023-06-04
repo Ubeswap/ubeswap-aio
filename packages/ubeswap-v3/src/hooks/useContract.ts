@@ -15,11 +15,13 @@ import { ENS_REGISTRAR_ADDRESSES, MULTICALL_ADDRESS, NONFUNGIBLE_POSITION_MANAGE
 import { useMemo } from "react";
 import { getContract } from "../utils";
 import { WMATIC_EXTENDED } from "../constants/tokens";
-import { useActiveWeb3React } from "./web3";
+import { ChainId, useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 // returns null on errors
 export function useContract<T extends Contract = Contract>(addressOrAddressMap: string | { [chainId: number]: string } | undefined, ABI: any, withSignerIfPossible = true): T | null {
-    const { library, account, chainId } = useActiveWeb3React();
+    const library = useProvider();
+    const { network, address } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
 
     return useMemo(() => {
         if (!addressOrAddressMap || !ABI || !library || !chainId) return null;
@@ -28,12 +30,12 @@ export function useContract<T extends Contract = Contract>(addressOrAddressMap: 
         else address = addressOrAddressMap[chainId];
         if (!address) return null;
         try {
-            return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined);
+            return getContract(address, ABI, library, withSignerIfPossible && address ? address : undefined);
         } catch (error) {
             console.error("Failed to get contract", error);
             return null;
         }
-    }, [addressOrAddressMap, ABI, library, chainId, withSignerIfPossible, account]) as T;
+    }, [addressOrAddressMap, ABI, library, chainId, withSignerIfPossible, address]) as T;
 }
 
 export function useV2MigratorContract() {
@@ -45,7 +47,8 @@ export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: b
 }
 
 export function useWETHContract(withSignerIfPossible?: boolean) {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     return useContract(chainId ? WMATIC_EXTENDED[chainId]?.address : undefined, WETH_ABI, withSignerIfPossible);
 }
 

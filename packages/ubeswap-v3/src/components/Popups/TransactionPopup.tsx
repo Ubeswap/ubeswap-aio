@@ -1,8 +1,8 @@
+import { useContractKit } from "@celo-tools/use-contractkit";
 import { AlertCircle, CheckCircle } from "react-feather";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { ExternalLink } from "../../theme";
 import { ExplorerDataType, getExplorerLink } from "../../utils/getExplorerLink";
-// import { t, Trans } from "@lingui/macro";
+import { ChainId } from "@ubeswap/sdk";
 
 interface TransactionPopupProps {
     hash: string;
@@ -11,7 +11,8 @@ interface TransactionPopupProps {
 }
 
 export default function TransactionPopup({ hash, success, summary }: TransactionPopupProps) {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
 
     return (
         <div id={success ? `transaction-success-toast` : `transaction-failed-toast`} className={`${hash} f f-ac`}>

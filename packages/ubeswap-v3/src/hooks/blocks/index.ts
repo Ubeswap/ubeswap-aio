@@ -3,9 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { GET_BLOCKS } from "../../utils/graphql-queries";
 import { splitQuery } from "../../utils/queries";
 import { useClients } from "../subgraph/useClients";
-import { useActiveWeb3React } from "../web3";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export function useBlocksFromTimestamps(
     timestamps: number[],
@@ -19,7 +19,8 @@ export function useBlocksFromTimestamps(
         | undefined;
     error: boolean;
 } {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
     const [blocks, setBlocks] = useState<any>();
     const [error, setError] = useState(false);
 

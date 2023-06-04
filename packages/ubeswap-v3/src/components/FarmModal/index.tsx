@@ -16,8 +16,6 @@ import { IsActive } from "../../components/FarmingMyFarms/IsActive";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
 import { ApprovalState, useApproveCallback } from "../../hooks/useApproveCallback";
 import { CurrencyAmount } from "@uniswap/sdk-core";
-import { FARMING_CENTER } from "../../../../constants/addresses";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { Token } from "@uniswap/sdk-core";
 import { formatUnits } from "ethers/lib/utils";
 import { BigNumber } from "ethers";
@@ -25,6 +23,7 @@ import { BigNumber } from "ethers";
 // import { t, Trans } from "@lingui/macro";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 interface FarmModalProps {
     event: {
@@ -66,7 +65,7 @@ export function FarmModal({
     closeHandler,
     farmingType,
 }: FarmModalProps) {
-    const { account } = useActiveWeb3React();
+    const { address } = useContractKit();
 
     const isTierFarming = useMemo(
         () => Boolean((+tier1Multiplier || +tier2Multiplier || +tier3Multiplier) && (+tokenAmountForTier1 || +tokenAmountForTier2 || +tokenAmountForTier3)),
@@ -220,7 +219,7 @@ export function FarmModal({
     );
 
     const balance = useCurrencyBalance(
-        account ?? undefined,
+        address ?? undefined,
         multiplierToken ? new Token(AlgebraConfig.CHAIN_PARAMS.chainId, multiplierToken.id, +multiplierToken.decimals, multiplierToken.symbol, multiplierToken.name) : undefined
     );
 

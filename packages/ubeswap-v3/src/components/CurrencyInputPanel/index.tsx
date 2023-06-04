@@ -1,18 +1,16 @@
-import { Pair } from "@uniswap/v2-sdk";
 import { Currency, CurrencyAmount, Percent, Token } from "@uniswap/sdk-core";
 import { ReactNode, useCallback, useMemo, useState } from "react";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
 import CurrencyLogo from "../CurrencyLogo";
-import DoubleCurrencyLogo from "../DoubleLogo";
 import { RowBetween, RowFixed } from "../Row";
 import { TYPE } from "../../theme";
-import { useActiveWeb3React } from "../../hooks/web3";
 // import { Trans } from "@lingui/macro";
 import { FiatValue } from "./FiatValue";
 import Loader from "../Loader";
 import useUSDCPrice from "../../hooks/useUSDCPrice";
 import { Aligner, AutoColumnStyled, Container, CurrencySelect, FiatRow, FixedContainer, InputPanel, InputRow, MaxButton, NumericalInputStyled, StyledTokenName } from "./styled";
 import { WrappedCurrency } from "../../models/types";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 interface CurrencyInputPanelProps {
     value: string;
@@ -67,9 +65,9 @@ export default function CurrencyInputPanel({
     ...rest
 }: CurrencyInputPanelProps) {
     const [modalOpen, setModalOpen] = useState(false);
-    const { account } = useActiveWeb3React();
+    const { address } = useContractKit();
 
-    const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined);
+    const balance = useCurrencyBalance(address ?? undefined, currency ?? undefined);
 
     const currentPrice = useUSDCPrice(currency ?? undefined);
 
@@ -162,7 +160,7 @@ export default function CurrencyInputPanel({
                                                 ) : (
                                                     showBalance &&
                                                     !balance &&
-                                                    account && (
+                                                    address && (
                                                         <span style={{ position: "absolute", right: 0 }}>
                                                             <Loader />
                                                         </span>

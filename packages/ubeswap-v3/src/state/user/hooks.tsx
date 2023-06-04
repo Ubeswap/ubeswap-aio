@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import { V2_FACTORY_ADDRESSES } from "../../constants/addresses";
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from "../../constants/routing";
 import { useAllTokens } from "../../hooks/Tokens";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { computePairAddress, Pair } from "../../utils/computePairAddress";
 import { AppState } from "../index";
 import {
@@ -26,6 +25,7 @@ import {
     updateUserSingleHopOnly,
     updateUserSlippageTolerance,
 } from "./actions";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 function serializeToken(token: Token): SerializedToken {
     return {
@@ -241,7 +241,8 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
 }
 
 export function useUserAddedTokens(): Token[] {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
     const serializedTokensMap = useAppSelector(({ user: { tokens } }) => tokens);
 
     // console.log(serializedTokensMap, 'tokMapppp')
@@ -291,7 +292,8 @@ export function useURLWarningVisible(): boolean {
  * Returns all the pairs of tokens that are tracked by the user for the current chain ID.
  */
 export function useTrackedTokenPairs(): [Token, Token][] {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
     const tokens = useAllTokens();
 
     // pinned pairs

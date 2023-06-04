@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useActiveWeb3React } from "../web3";
 import { useClients } from "./useClients";
 import {
     CHART_FEE_LAST_ENTRY,
@@ -45,6 +44,7 @@ import { fetchEternalFarmAPR, fetchPoolsAPR } from "../../utils/api";
 import { farmingClient } from "apollo/client";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 function parsePoolsData(tokenData: PoolSubgraph[] | string) {
     if (typeof tokenData === "string") return {};
@@ -67,7 +67,7 @@ function parseTokensData(tokenData: TokenInSubgraph[] | string) {
 }
 
 export function useInfoSubgraph() {
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
     const { dataClient } = useClients();
     const [t24, t48, tWeek] = useDeltaTimestamps();
 

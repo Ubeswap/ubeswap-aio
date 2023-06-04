@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { useGasPrice } from "../../hooks/useGasPrice";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { updateGasPrice } from "./actions";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export default function GasUpdater(): null {
     const dispatch = useAppDispatch();
 
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
 
     const block = useAppSelector((state) => {
         return state.application.blockNumber[chainId ?? AlgebraConfig.CHAIN_PARAMS.chainId];

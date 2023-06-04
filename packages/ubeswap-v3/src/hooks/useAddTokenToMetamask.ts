@@ -1,13 +1,13 @@
 import { getTokenLogoURL } from "../components/CurrencyLogo";
 import { Currency, Token } from "@uniswap/sdk-core";
 import { useCallback, useState } from "react";
-import { useActiveWeb3React } from "../hooks/web3";
+import { useProvider } from "@celo-tools/use-contractkit";
 
 export default function useAddTokenToMetamask(currencyToAdd: Currency | undefined): {
     addToken: () => void;
     success: boolean | undefined;
 } {
-    const { library } = useActiveWeb3React();
+    const library = useProvider();
 
     const token: Token | undefined = currencyToAdd?.wrapped;
 

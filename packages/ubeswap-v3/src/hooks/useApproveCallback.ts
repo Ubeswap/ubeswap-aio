@@ -8,10 +8,10 @@ import { SWAP_ROUTER_ADDRESSES } from "../constants/addresses";
 import { useHasPendingApproval, useTransactionAdder } from "../state/transactions/hooks";
 import { calculateGasMargin } from "../utils/calculateGasMargin";
 import { useTokenContract } from "./useContract";
-import { useActiveWeb3React } from "./web3";
 import { useTokenAllowance } from "./useTokenAllowance";
 import { useAppSelector } from "../state/hooks";
 import { GAS_PRICE_MULTIPLIER } from "./useGasPrice";
+import { ChainId, useContractKit } from "@celo-tools/use-contractkit";
 
 // import { t } from '@lingui/macro'
 export enum ApprovalState {
@@ -23,9 +23,10 @@ export enum ApprovalState {
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
 export function useApproveCallback(amountToApprove?: CurrencyAmount<Currency>, spender?: string): [ApprovalState, () => Promise<void>] {
-    const { account, chainId } = useActiveWeb3React();
+    const { network, address } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined;
-    const currentAllowance = useTokenAllowance(token, account ?? undefined, spender);
+    const currentAllowance = useTokenAllowance(token, address ?? undefined, spender);
     const pendingApproval = useHasPendingApproval(token?.address, spender);
 
     const gasPrice = useAppSelector((state) => {
@@ -106,7 +107,8 @@ export function useApproveCallback(amountToApprove?: CurrencyAmount<Currency>, s
 
 // wraps useApproveCallback in the context of a swap
 export function useApproveCallbackFromTrade(trade: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType> | undefined, allowedSlippage: Percent) {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     const v3SwapRouterAddress = chainId ? SWAP_ROUTER_ADDRESSES[chainId] : undefined;
     const amountToApprove = useMemo(() => (trade && trade.inputAmount.currency.isToken ? trade.maximumAmountIn(allowedSlippage) : undefined), [trade, allowedSlippage]);
     return useApproveCallback(amountToApprove, chainId ? (trade instanceof V3Trade ? v3SwapRouterAddress : undefined) : undefined);

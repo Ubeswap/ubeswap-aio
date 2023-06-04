@@ -1,17 +1,8 @@
-import { Web3Provider } from "@ethersproject/providers";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
-import { Web3ReactContextInterface } from "@web3-react/core/dist/types";
 import { useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { gnosisSafe, injected, ontoconnector, OntoWalletConnector } from "../connectors";
-import { NetworkContextName } from "../constants/misc";
 import { OntoWindow } from "../models/types/global";
-
-export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> {
-    const context = useWeb3React<Web3Provider>();
-    const contextNetwork = useWeb3React<Web3Provider>(NetworkContextName);
-    return context.active ? context : contextNetwork;
-}
 
 export function useEagerConnect() {
     const { activate, active } = useWeb3React();
@@ -107,7 +98,7 @@ export function useEagerConnect() {
  * and out after checking what network theyre on
  */
 export function useInactiveListener(suppress = false) {
-    const { active, error, activate, connector } = useWeb3React();
+    const { active, error, activate } = useWeb3React();
 
     const ontoWrongChain = !!localStorage.getItem("ontoWarning");
 

@@ -1,10 +1,11 @@
 import { useActivePopups } from "../../state/application/hooks";
 import PopupItem from "./PopupItem";
 import { useURLWarningVisible } from "../../state/user/hooks";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { FixedPopupColumn, MobilePopupInner, MobilePopupWrapper } from "./styled";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
+import { ChainId } from "@ubeswap/sdk";
 
 export default function Popups() {
     // get all popups
@@ -13,7 +14,8 @@ export default function Popups() {
     const urlWarningActive = useURLWarningVisible();
 
     // need extra padding if network is not L1 Ethereum
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     const isNotOnMainnet = Boolean(chainId && chainId !== AlgebraConfig.CHAIN_PARAMS.chainId);
 
     return (

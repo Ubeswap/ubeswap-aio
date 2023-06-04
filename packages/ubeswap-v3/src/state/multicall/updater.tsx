@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef } from "react";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useMulticall2Contract } from "../../hooks/useContract";
 import useDebounce from "../../hooks/useDebounce";
 import chunkArray from "../../utils/chunkArray";
@@ -9,6 +8,7 @@ import { AppState } from "../index";
 import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from "./actions";
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import { Call, parseCallKey } from "./utils";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 const DEFAULT_GAS_REQUIRED = 1_000_000;
 
@@ -116,7 +116,8 @@ export default function Updater(): null {
     // wait for listeners to settle before triggering updates
     const debouncedListeners = useDebounce(state.callListeners, 100);
     const latestBlockNumber = useBlockNumber();
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
     const multicall2Contract = useMulticall2Contract();
     const cancellations = useRef<{ blockNumber: number; cancellations: (() => void)[] }>();
 

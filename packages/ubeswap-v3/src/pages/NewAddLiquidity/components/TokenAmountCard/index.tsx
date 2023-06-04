@@ -6,7 +6,6 @@ import "./index.scss";
 import CurrencyLogo from "../../../../components/CurrencyLogo";
 import { WrappedCurrency } from "models/types";
 import { useCurrencyBalance } from "../../../../state/wallet/hooks";
-import { useActiveWeb3React } from "../../../../hooks/web3";
 import useUSDCPrice, { useUSDCValue } from "../../../../hooks/useUSDCPrice";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Input from "../../../../components/NumericalInput";
@@ -16,6 +15,7 @@ import { tryParseAmount } from "../../../../state/swap/hooks";
 import { useBestV3TradeExactIn } from "../../../../hooks/useBestV3Trade";
 import { STABLE_TOKEN_FOR_USD_PRICE } from "../../../../constants/tokens";
 import { useInitialTokenPrice, useInitialUSDPrices } from "../../../../state/mint/v3/hooks";
+import { useContractKit } from "@celo-tools/use-contractkit";
 // import { t, Trans } from "@lingui/macro";
 
 interface ITokenAmountCard {
@@ -53,7 +53,7 @@ export function TokenAmountCard({
     priceFormat,
     isBase,
 }: ITokenAmountCard) {
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
 
     const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined);
     const balanceUSD = useUSDCPrice(currency ?? undefined);

@@ -13,7 +13,6 @@ import { useInternet } from "../hooks/useInternet";
 import { useIsNetworkFailed } from "../hooks/useIsNetworkFailed";
 import Loader from "../components/Loader";
 import GoogleAnalyticsReporter from "../components/analytics/GoogleAnalyticsReporter";
-import { useActiveWeb3React } from "../hooks/web3";
 import { GlobalStyle, Marginer, NetworkFailedCard } from "./styled";
 import Footer from "../components/Footer";
 // import { t, Trans } from "@lingui/macro";
@@ -24,6 +23,7 @@ import AlgebraConfig from "../algebra.config";
 import styled from "styled-components/macro";
 import PoolBackground from "../assets/images/background-pool.jpg";
 import FarmBackground from "../assets/images/background-farm.jpg";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 const AddLiquidity = React.lazy(() => import("./AddLiquidity"));
 const FarmingPage = React.lazy(() => import("./Farming/FarmingPage"));
@@ -59,7 +59,7 @@ export default function App() {
             return 60;
         },
     });
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
     const networkFailed = useIsNetworkFailed();
     const [page, setPage] = useState("pool");
 

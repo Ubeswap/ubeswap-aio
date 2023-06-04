@@ -2,7 +2,6 @@
 import PositionList from "../../components/PositionList";
 import { SwitchLocaleLink } from "../../components/SwitchLocaleLink";
 import { useV3Positions } from "../../hooks/useV3Positions";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useCallback, useEffect, useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useWalletModalToggle } from "../../state/application/hooks";
@@ -21,8 +20,8 @@ import { useShowNewestPosition } from "../../state/mint/v3/hooks";
 import { useContractKit } from "@celo-tools/use-contractkit";
 
 export default function Pool() {
-    const { account, chainId } = useActiveWeb3React();
-    const { connect } = useContractKit();
+    const { address: account, network, connect } = useContractKit();
+    const { chainId } = network;
     // const toggleWalletModal = useWalletModalToggle();
 
     const [userHideClosedPositions, setUserHideClosedPositions] = useUserHideClosedPositions();
@@ -79,12 +78,6 @@ export default function Pool() {
     }, [showNewestPosition, _filteredPositions]);
 
     const showConnectAWallet = Boolean(!account);
-
-    let chainSymbol;
-
-    if (chainId === 137) {
-        chainSymbol = "MATIC";
-    }
 
     const reload = useCallback(() => window.location.reload(), []);
 

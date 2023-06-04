@@ -17,12 +17,10 @@ import { formatCurrencyAmount } from "../../utils/formatCurrencyAmount";
 import { useV3PositionFees } from "../../hooks/useV3PositionFees";
 import { BigNumber } from "@ethersproject/bignumber";
 import { Currency, CurrencyAmount, Fraction, Percent, Token } from "@uniswap/sdk-core";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useV3NFTPositionManagerContract } from "../../hooks/useContract";
 import { useIsTransactionPending, useTransactionAdder } from "../../state/transactions/hooks";
 import TransactionConfirmationModal, { ConfirmationModalContent } from "../../components/TransactionConfirmationModal";
 import { TransactionResponse } from "@ethersproject/providers";
-import { Dots } from "../../components/swap/styled";
 import { getPriceOrderingFromPositionForUI } from "../../components/PositionListItem";
 import RateToggle from "../../components/RateToggle";
 import { useSingleCallResult } from "../../state/multicall/hooks";
@@ -45,6 +43,8 @@ import { LinkedCurrency } from "./LinkedCurrency";
 import { CurrentPriceCard } from "./CurrentPriceCard";
 import { WrappedCurrency } from "../../models/types";
 import Card from "../../shared/components/Card/Card";
+import { Dots } from "./styleds";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 function useQuery() {
     const { search } = useLocation();
@@ -57,7 +57,9 @@ export default function PositionPage({
         params: { tokenId: tokenIdFromUrl },
     },
 }: RouteComponentProps<{ tokenId?: string }>) {
-    const { chainId, account, library } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
 
     const query = useQuery();
 

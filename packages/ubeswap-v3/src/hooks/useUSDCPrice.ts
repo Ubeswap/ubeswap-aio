@@ -1,9 +1,9 @@
 import { Currency, CurrencyAmount, Price, Token } from "@uniswap/sdk-core";
 import { useMemo } from "react";
 import { useBestV3TradeExactOut } from "./useBestV3Trade";
-import { useActiveWeb3React } from "./web3";
 
 import { STABLE_TOKEN_FOR_USD_PRICE } from "../constants/tokens";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 // Stablecoin amounts used when calculating spot price for a given currency.
 // The amount is large enough to filter low liquidity pairs.
@@ -18,7 +18,8 @@ const STABLECOIN_AMOUNT_OUT_FILTERED: CurrencyAmount<Token> = CurrencyAmount.fro
  * @param currency currency to compute the USDC price of
  */
 export default function useUSDCPrice(currency?: Currency, allLiquidity?: boolean): Price<Currency, Token> | undefined {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
 
     const amountOut = chainId ? (allLiquidity ? STABLECOIN_AMOUNT_OUT_ALL : STABLECOIN_AMOUNT_OUT_FILTERED) : undefined;
     const stablecoin = amountOut?.currency;

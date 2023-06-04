@@ -6,7 +6,6 @@ import { PoolState } from "../../../hooks/usePools";
 import { encodeSqrtRatioX96, FeeAmount, nearestUsableTick, Pool, Position, priceToClosestTick, TickMath, tickToPrice } from "../../../lib/src";
 import { Currency, CurrencyAmount, Price, Rounding, Token } from "@uniswap/sdk-core";
 import { useCallback, useMemo } from "react";
-import { useActiveWeb3React } from "../../../hooks/web3";
 import { AppState } from "../../index";
 import { tryParseAmount } from "../../swap/hooks";
 import { useCurrencyBalances } from "../../wallet/hooks";
@@ -14,6 +13,7 @@ import { Bound, Field, setFullRange, typeInput, typeLeftRangeInput, typeRightRan
 import { tryParseTick } from "./utils";
 import { usePool } from "../../../hooks/usePools";
 import { useAppDispatch, useAppSelector } from "../../../state/hooks";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export interface IDerivedMintInfo {
     pool?: Pool | null;
@@ -146,7 +146,7 @@ export function useV3DerivedMintInfo(
     lowerPrice: any;
     upperPrice: any;
 } {
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
 
     const { independentField, typedValue, leftRangeTypedValue, rightRangeTypedValue, startPriceTypedValue } = useV3MintState();
 

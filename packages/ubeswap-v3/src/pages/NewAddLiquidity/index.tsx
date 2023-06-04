@@ -1,6 +1,5 @@
 import { useCurrency } from "../../hooks/Tokens";
 import usePrevious from "../../hooks/usePrevious";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { NavLink, RouteComponentProps, Switch, useRouteMatch } from "react-router-dom";
 import { useV3DerivedMintInfo, useV3MintState, useV3MintActionHandlers, useInitialUSDPrices, useCurrentStep } from "../../state/mint/v3/hooks";
@@ -33,6 +32,7 @@ import { useWalletModalToggle } from "../../state/application/hooks";
 import { isMobileOnly } from "react-device-detect";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 const DEFAULT_ADD_IN_RANGE_SLIPPAGE_TOLERANCE = new Percent(50, 10_000);
 
@@ -48,7 +48,8 @@ export function NewAddLiquidityPage({
 }>) {
     const [isRejected, setRejected] = useState(false);
 
-    const { account, chainId } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
 
     const toggleWalletModal = useWalletModalToggle(); // toggle wallet when disconnected
 

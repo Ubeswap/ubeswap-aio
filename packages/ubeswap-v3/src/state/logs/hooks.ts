@@ -1,9 +1,9 @@
-import { useBlockNumber } from '../application/hooks'
-import { useEffect, useMemo } from 'react'
-import { useActiveWeb3React } from '../../hooks/web3'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { addListener, removeListener } from './slice'
-import { EventFilter, filterToKey, Log } from './utils'
+import { useBlockNumber } from "../application/hooks";
+import { useEffect, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { addListener, removeListener } from "./slice";
+import { EventFilter, filterToKey, Log } from "./utils";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 enum LogsState {
     // The filter is invalid
@@ -19,8 +19,8 @@ enum LogsState {
 }
 
 export interface UseLogsResult {
-    logs: Log[] | undefined
-    state: LogsState
+    logs: Log[] | undefined;
+    state: LogsState;
 }
 
 /**
@@ -28,49 +28,50 @@ export interface UseLogsResult {
  * @param filter The logs filter, without `blockHash`, `fromBlock` or `toBlock` defined.
  */
 export function useLogs(filter: EventFilter | undefined): UseLogsResult {
-    const { chainId } = useActiveWeb3React()
-    const blockNumber = useBlockNumber()
+    const { network } = useContractKit();
+    const { chainId } = network;
+    const blockNumber = useBlockNumber();
 
-    const logs = useAppSelector((state) => state.logs)
-    const dispatch = useAppDispatch()
+    const logs = useAppSelector((state) => state.logs);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (!filter || !chainId) return
+        if (!filter || !chainId) return;
 
-        dispatch(addListener({ chainId, filter }))
+        dispatch(addListener({ chainId, filter }));
         return () => {
-            dispatch(removeListener({ chainId, filter }))
-        }
-    }, [chainId, dispatch, filter])
+            dispatch(removeListener({ chainId, filter }));
+        };
+    }, [chainId, dispatch, filter]);
 
-    const filterKey = useMemo(() => (filter ? filterToKey(filter) : undefined), [filter])
+    const filterKey = useMemo(() => (filter ? filterToKey(filter) : undefined), [filter]);
 
     return useMemo(() => {
         if (!chainId || !filterKey || !blockNumber)
             return {
                 logs: undefined,
-                state: LogsState.INVALID
-            }
+                state: LogsState.INVALID,
+            };
 
-        const state = logs[chainId]?.[filterKey]
-        const result = state?.results
+        const state = logs[chainId]?.[filterKey];
+        const result = state?.results;
         if (!result) {
             return {
                 state: LogsState.LOADING,
-                logs: undefined
-            }
+                logs: undefined,
+            };
         }
 
         if (result.error) {
             return {
                 state: LogsState.ERROR,
-                logs: undefined
-            }
+                logs: undefined,
+            };
         }
 
         return {
             state: result.blockNumber >= blockNumber ? LogsState.SYNCED : LogsState.SYNCING,
-            logs: result.logs
-        }
-    }, [blockNumber, chainId, filterKey, logs])
+            logs: result.logs,
+        };
+    }, [blockNumber, chainId, filterKey, logs]);
 }

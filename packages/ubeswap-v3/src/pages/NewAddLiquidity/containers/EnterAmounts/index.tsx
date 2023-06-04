@@ -10,7 +10,6 @@ import { useUSDCValue } from "../../../../hooks/useUSDCPrice";
 import { maxAmountSpend } from "../../../../utils/maxAmountSpend";
 import { ApprovalState, useApproveCallback } from "../../../../hooks/useApproveCallback";
 import { NONFUNGIBLE_POSITION_MANAGER_ADDRESSES } from "../../../../constants/addresses";
-import { useActiveWeb3React } from "../../../../hooks/web3";
 import { Bound, updateCurrentStep } from "../../../../state/mint/v3/actions";
 import { useEffect, useMemo } from "react";
 import { tryParseAmount } from "../../../../state/swap/hooks";
@@ -19,6 +18,7 @@ import { StepTitle } from "../../../../pages/NewAddLiquidity/components/StepTitl
 import { PriceFormats } from "../../../../pages/NewAddLiquidity/components/PriceFomatToggler";
 import { useHistory } from "react-router-dom";
 import { useAppDispatch } from "../../../../state/hooks";
+import { useContractKit } from "@celo-tools/use-contractkit";
 // import { t, Trans } from "@lingui/macro";
 
 interface IEnterAmounts {
@@ -32,7 +32,8 @@ interface IEnterAmounts {
 }
 
 export function EnterAmounts({ currencyA, currencyB, mintInfo, isCompleted, additionalStep, priceFormat, backStep }: IEnterAmounts) {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
 
     const { independentField, typedValue } = useV3MintState();
 

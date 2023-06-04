@@ -13,10 +13,11 @@ import { AutoColumn } from "../Column";
 import Circle from "../../assets/images/blue-loader.svg";
 // @ts-ignore
 import MetaMaskLogo from "../../assets/svg/metamask-logo.svg";
-import { useActiveWeb3React } from "../../hooks/web3";
 import useAddTokenToMetamask from "../../hooks/useAddTokenToMetamask";
 // import { Trans } from '@lingui/macro'
 import { BottomSection, ConfirmedIcon, Section, StyledLogo, Wrapper } from "./styled";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
+import { ChainId } from "@ubeswap/sdk";
 
 interface ConfirmationPendingContentProps {
     onDismiss: () => void;
@@ -56,7 +57,7 @@ interface TransactionSubmittedContentProps {
 function TransactionSubmittedContent({ onDismiss, chainId, hash, currencyToAdd, inline }: TransactionSubmittedContentProps) {
     const theme = useContext(ThemeContext);
 
-    const { library } = useActiveWeb3React();
+    const library = useProvider();
 
     const { addToken, success } = useAddTokenToMetamask(currencyToAdd);
 
@@ -167,7 +168,8 @@ interface ConfirmationModalProps {
 }
 
 export default function TransactionConfirmationModal({ isOpen, onDismiss, attemptingTxn, hash, pendingText, content, currencyToAdd }: ConfirmationModalProps) {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
 
     // if on L2 and txn is submitted, close automatically (if open)
     useEffect(() => {

@@ -1,5 +1,4 @@
 import { Lock, Plus } from "react-feather";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useWalletModalToggle } from "../../state/application/hooks";
 import { convertDateTime, getCountdownTime } from "../../utils/time";
 import { getProgress } from "../../utils/getProgress";
@@ -19,6 +18,7 @@ import { formatUnits } from "ethers/lib/utils";
 import { BigNumber } from "ethers";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 interface FarmingEventCardProps {
     active?: boolean;
@@ -55,7 +55,7 @@ export function FarmingEventCard({
     eternal,
     secret,
 }: FarmingEventCardProps) {
-    const { account } = useActiveWeb3React();
+    const { address } = useContractKit();
     const toggleWalletModal = useWalletModalToggle();
 
     const _startTime = useMemo(() => {
@@ -282,7 +282,7 @@ export function FarmingEventCard({
                     </div>
                 </div>
             )}
-            {account && !active ? (
+            {address && !active ? (
                 <>
                     {/* <div style={{ marginTop: "9px", border: "none", lineHeight: "19px" }} className={`w-100 b br-8 fs-085 ${!eternal ? "mt-05" : ""}`}>
                         <span>TVL : </span>

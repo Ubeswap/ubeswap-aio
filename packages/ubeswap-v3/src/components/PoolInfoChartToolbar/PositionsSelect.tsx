@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { PriceRangeChart } from "../../models/interfaces";
 import { getPositionPeriod } from "../../utils/time";
 import stc from "string-to-color";
 import "./index.scss";
-import { ChevronDown, Layers } from "react-feather";
-import { useActiveWeb3React } from "../../hooks/web3";
+import { Layers } from "react-feather";
+import { useContractKit } from "@celo-tools/use-contractkit";
 // import { t, Trans } from "@lingui/macro";
 
 interface PositionsSelectProps {
@@ -17,7 +17,7 @@ interface PositionsSelectProps {
 }
 
 export default function PositionsSelect({ positions: { closed, opened }, setSelected, selected }: PositionsSelectProps) {
-    const { account } = useActiveWeb3React();
+    const { address } = useContractKit();
 
     const _opened = useMemo(() => {
         const res: any[] = [];
@@ -28,7 +28,7 @@ export default function PositionsSelect({ positions: { closed, opened }, setSele
             });
         }
         return res;
-    }, [opened, account]);
+    }, [opened, address]);
 
     const _closed = useMemo(() => {
         const res: any[] = [];
@@ -40,7 +40,7 @@ export default function PositionsSelect({ positions: { closed, opened }, setSele
             });
         }
         return res;
-    }, [closed, account]);
+    }, [closed, address]);
 
     const closeHandler = useCallback((e: any) => {
         const target = e.target.control;
