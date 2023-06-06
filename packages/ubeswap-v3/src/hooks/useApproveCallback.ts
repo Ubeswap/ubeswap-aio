@@ -11,7 +11,7 @@ import { useTokenContract } from "./useContract";
 import { useTokenAllowance } from "./useTokenAllowance";
 import { useAppSelector } from "../state/hooks";
 import { GAS_PRICE_MULTIPLIER } from "./useGasPrice";
-import { ChainId, useContractKit } from "@celo-tools/use-contractkit";
+import { ChainId, useContractKit, useGetConnectedSigner } from "@celo-tools/use-contractkit";
 
 // import { t } from '@lingui/macro'
 export enum ApprovalState {
@@ -24,6 +24,7 @@ export enum ApprovalState {
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
 export function useApproveCallback(amountToApprove?: CurrencyAmount<Currency>, spender?: string): [ApprovalState, () => Promise<void>] {
     const { network, address } = useContractKit();
+    const getConnectedSigner = useGetConnectedSigner();
     const chainId = network.chainId as unknown as ChainId;
     const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined;
     const currentAllowance = useTokenAllowance(token, address ?? undefined, spender);
@@ -45,7 +46,7 @@ export function useApproveCallback(amountToApprove?: CurrencyAmount<Currency>, s
         return currentAllowance.lessThan(amountToApprove) ? (pendingApproval ? ApprovalState.PENDING : ApprovalState.NOT_APPROVED) : ApprovalState.APPROVED;
     }, [amountToApprove, currentAllowance, pendingApproval, spender]);
 
-    const tokenContract = useTokenContract(token?.address);
+    const tokenContractDisconnected = useTokenContract(token?.address);
     const addTransaction = useTransactionAdder();
 
     const approve = useCallback(async (): Promise<void> => {
@@ -63,7 +64,7 @@ export function useApproveCallback(amountToApprove?: CurrencyAmount<Currency>, s
             return;
         }
 
-        if (!tokenContract) {
+        if (!tokenContractDisconnected) {
             console.error("tokenContract is null");
             return;
         }
@@ -77,6 +78,9 @@ export function useApproveCallback(amountToApprove?: CurrencyAmount<Currency>, s
             console.error("no spender");
             return;
         }
+
+        // connect
+        const tokenContract = tokenContractDisconnected.connect(await getConnectedSigner());
 
         let useExact = false;
         const estimatedGas = await tokenContract.estimateGas.approve(spender, MaxUint256).catch(() => {
@@ -100,7 +104,7 @@ export function useApproveCallback(amountToApprove?: CurrencyAmount<Currency>, s
                 console.debug("Failed to approve token", error);
                 // throw error
             });
-    }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction, chainId]);
+    }, [approvalState, token, tokenContractDisconnected, amountToApprove, spender, addTransaction, chainId]);
 
     return [approvalState, approve];
 }
