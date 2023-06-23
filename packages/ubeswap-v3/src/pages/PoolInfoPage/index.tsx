@@ -17,7 +17,7 @@ import { InfoTotalStats } from "../../components/InfoTotalStats";
 import { ArrowLeft } from "react-feather";
 import { NavLink } from "react-router-dom";
 import Card from "../../shared/components/Card/Card";
-import { useActiveWeb3React } from "../../hooks/web3";
+import { useContractKit } from "@celo-tools/use-contractkit";
 // import { t, Trans } from "@lingui/macro";
 
 interface PoolInfoPageProps {
@@ -40,7 +40,7 @@ export default function PoolInfoPage({
         params: { id },
     },
 }: PoolInfoPageProps & RouteComponentProps<{ id?: string }>) {
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
 
     const {
         fetchPool: { fetchPoolFn, poolResult },

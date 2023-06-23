@@ -1,7 +1,6 @@
 import { Currency, CurrencyAmount, Ether, Token } from "@uniswap/sdk-core";
 import JSBI from "jsbi";
 import { useMemo } from "react";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useAllTokens } from "../../hooks/Tokens";
 import { useMulticall2Contract } from "../../hooks/useContract";
 import { isAddress } from "../../utils";
@@ -10,6 +9,7 @@ import { Interface } from "@ethersproject/abi";
 import ERC20ABI from "../../abis/erc20.json";
 import { Erc20Interface } from "../../abis/types/Erc20";
 import usePrevious, { usePreviousNonEmptyObject } from "../../hooks/usePrevious";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
@@ -17,7 +17,8 @@ import usePrevious, { usePreviousNonEmptyObject } from "../../hooks/usePrevious"
 export function useETHBalances(uncheckedAddresses?: (string | undefined)[]): {
     [address: string]: CurrencyAmount<Currency> | undefined;
 } {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
     const multicallContract = useMulticall2Contract();
 
     const addresses: string[] = useMemo(
@@ -133,7 +134,7 @@ export function useCurrencyBalance(account?: string, currency?: Currency): Curre
 
 // mimics useAllBalances
 export function useAllTokenBalances(): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
     const allTokens = useAllTokens();
     const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens]);
     const balances = useTokenBalances(account ?? undefined, allTokensArray);

@@ -5,8 +5,8 @@ import { useMemo } from "react";
 import { useSingleContractMultipleData } from "../state/multicall/hooks";
 import { useAllV3Routes } from "./useAllV3Routes";
 import { useV3Quoter } from "./useContract";
-import { useActiveWeb3React } from "./web3";
 import usePrevious from "./usePrevious";
+import { ChainId, useContractKit } from "@celo-tools/use-contractkit";
 
 export enum V3TradeState {
     LOADING,
@@ -24,7 +24,8 @@ const DEFAULT_GAS_QUOTE = 2_000_000;
  * @param currencyOut the desired output currency
  */
 export function useBestV3TradeExactIn(amountIn?: CurrencyAmount<Currency>, currencyOut?: Currency): { state: V3TradeState; trade: Trade<Currency, Currency, TradeType.EXACT_INPUT> | null } {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     const quoter = useV3Quoter();
 
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut);
@@ -113,7 +114,8 @@ export function useBestV3TradeExactIn(amountIn?: CurrencyAmount<Currency>, curre
  * @param amountOut the amount to swap out
  */
 export function useBestV3TradeExactOut(currencyIn?: Currency, amountOut?: CurrencyAmount<Currency>): { state: V3TradeState; trade: Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null } {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     const quoter = useV3Quoter();
 
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency);

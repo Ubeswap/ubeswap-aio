@@ -5,12 +5,12 @@ import "./index.scss";
 import CurrencyLogo from "../../../../components/CurrencyLogo";
 import { ChevronRight } from "react-feather";
 import { useCallback, useMemo, useState } from "react";
-import { useActiveWeb3React } from "../../../../hooks/web3";
 import { useCurrencyBalance } from "../../../../state/wallet/hooks";
 import useUSDCPrice, { useUSDCValue } from "../../../../hooks/useUSDCPrice";
 import { PriceFormats } from "../PriceFomatToggler";
 import { CurrencySearchModal } from "ubeswap-components";
 import { Token as UbeswapToken, ChainId } from "@ubeswap/sdk";
+import { useContractKit } from "@celo-tools/use-contractkit";
 // import { t, Trans } from "@lingui/macro";
 
 interface ITokenCard {
@@ -23,7 +23,7 @@ interface ITokenCard {
 export function TokenCard({ handleTokenSelection, currency, otherCurrency, priceFormat }: ITokenCard) {
     const [selectModal, toggleSelectModal] = useState(false);
 
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
 
     const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined);
     const balanceUSD = useUSDCPrice(currency ?? undefined);

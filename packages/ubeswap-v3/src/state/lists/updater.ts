@@ -3,14 +3,14 @@ import { UNSUPPORTED_LIST_URLS } from "../../constants/lists";
 import { useFetchListCallback } from "../../hooks/useFetchListCallback";
 import useInterval from "../../hooks/useInterval";
 import useIsWindowVisible from "../../hooks/useIsWindowVisible";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useCallback, useEffect } from "react";
 import { useAppDispatch } from "../../state/hooks";
 import { acceptListUpdate } from "./actions";
 import { useActiveListUrls, useAllLists } from "./hooks";
+import { useProvider } from "@celo-tools/use-contractkit";
 
 export default function Updater(): null {
-    const { chainId, library } = useActiveWeb3React();
+    const library = useProvider();
     const dispatch = useAppDispatch();
     const isWindowVisible = useIsWindowVisible();
 

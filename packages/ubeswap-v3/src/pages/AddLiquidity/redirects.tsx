@@ -1,9 +1,9 @@
-import { useActiveWeb3React } from "../../hooks/web3";
 import { NewAddLiquidityPage } from "../../pages/NewAddLiquidity";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { WMATIC_EXTENDED } from "../../constants/tokens";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export function RedirectDuplicateTokenIdsNew(props: RouteComponentProps<{ currencyIdA: string; currencyIdB: string; step: string }>) {
     const {
@@ -12,7 +12,8 @@ export function RedirectDuplicateTokenIdsNew(props: RouteComponentProps<{ curren
         },
     } = props;
 
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
 
     // prevent weth + eth
     let symbol;

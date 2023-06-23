@@ -2,7 +2,6 @@ import { NONFUNGIBLE_POSITION_MANAGER_ADDRESSES } from "../../../../constants/ad
 import { ZERO_PERCENT } from "../../../../constants/misc";
 import { useV3NFTPositionManagerContract } from "../../../../hooks/useContract";
 import useTransactionDeadline from "../../../../hooks/useTransactionDeadline";
-import { useActiveWeb3React } from "../../../../hooks/web3";
 import { useUserSlippageToleranceWithDefault } from "../../../../state/user/hooks";
 
 import { NonfungiblePositionManager as NonFunPosMan } from "../../../../lib/src/nonfungiblePositionManager";
@@ -21,6 +20,7 @@ import { ApprovalState, useApproveCallback } from "../../../../hooks/useApproveC
 import { Field } from "../../../../state/mint/actions";
 import { useIsNetworkFailedImmediate } from "../../../../hooks/useIsNetworkFailed";
 import { setAddLiquidityTxHash } from "../../../../state/mint/v3/actions";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 interface IAddLiquidityButton {
     baseCurrency: Currency | undefined;
@@ -33,7 +33,9 @@ interface IAddLiquidityButton {
 const DEFAULT_ADD_IN_RANGE_SLIPPAGE_TOLERANCE = new Percent(50, 10_000);
 
 export function AddLiquidityButton({ baseCurrency, quoteCurrency, mintInfo, handleAddLiquidity, title, setRejected }: IAddLiquidityButton) {
-    const { chainId, library, account } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
 
     const positionManager = useV3NFTPositionManagerContract();
 

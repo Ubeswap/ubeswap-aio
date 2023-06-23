@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { useClients } from "../../hooks/subgraph/useClients";
 import { HAS_TRANSFERED_POSITIONS, ONE_ETERNAL_FARMING, ONE_FARMING_EVENT } from "../../utils/graphql-queries";
 import { isFarming, hasTransferredPositions } from "./actions";
-import { useActiveWeb3React } from "../../hooks/web3";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export function useFarmingActionsHandlers(): {
     onIsFarming: () => void;
@@ -13,7 +13,7 @@ export function useFarmingActionsHandlers(): {
     const { farmingClient } = useClients();
     const { startTime } = useAppSelector((state) => state.farming);
 
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
 
     const isFarmingAdd = useCallback(async () => {
         try {

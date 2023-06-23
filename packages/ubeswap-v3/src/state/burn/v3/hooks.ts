@@ -1,7 +1,6 @@
 import { Currency, CurrencyAmount, Percent } from "@uniswap/sdk-core";
 import { Position } from "../../../lib/src";
 import { usePool } from "../../../hooks/usePools";
-import { useActiveWeb3React } from "../../../hooks/web3";
 import { useToken } from "../../../hooks/Tokens";
 import { useV3PositionFees } from "../../../hooks/useV3PositionFees";
 import { useCallback, useMemo } from "react";
@@ -11,6 +10,7 @@ import { unwrappedToken } from "../../../utils/unwrappedToken";
 import { useAppDispatch, useAppSelector } from "../../../state/hooks";
 // import { t } from '@lingui/macro'
 import { PositionPool } from "../../../models/interfaces";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export function useBurnV3State(): AppState["burnV3"] {
     return useAppSelector((state) => state.burnV3);
@@ -29,7 +29,7 @@ export function useDerivedV3BurnInfo(
     outOfRange: boolean;
     error?: string;
 } {
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
     const { percent } = useBurnV3State();
 
     const token0 = useToken(position?.token0);

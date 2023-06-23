@@ -3,9 +3,9 @@ import { useDeltaTimestamps } from "../utils/queries";
 import { useEffect, useMemo, useState } from "react";
 import { ApolloClient, gql, NormalizedCacheObject } from "@apollo/client";
 import { useClients } from "./subgraph/useClients";
-import { useActiveWeb3React } from "./web3";
 
 import AlgebraConfig from "../algebra.config";
+import { ChainId, useContractKit } from "@celo-tools/use-contractkit";
 
 export interface EthPrices {
     current: number;
@@ -99,7 +99,8 @@ export function useEthPrices(): EthPrices | undefined {
     const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48, tWeek]);
 
     // index on active network
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     const indexedPrices = prices?.[chainId ?? AlgebraConfig.CHAIN_PARAMS.chainId];
 
     const formattedBlocks = useMemo(() => {

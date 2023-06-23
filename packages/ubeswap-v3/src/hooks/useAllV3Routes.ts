@@ -2,8 +2,8 @@ import { Currency } from "@uniswap/sdk-core";
 import { Pool, Route } from "../lib/src";
 import { useMemo } from "react";
 import { useUserSingleHopOnly } from "../state/user/hooks";
-import { useActiveWeb3React } from "./web3";
 import { useV3SwapPools } from "./useV3SwapPools";
+import { ChainId, useContractKit } from "@celo-tools/use-contractkit";
 
 /**
  * Returns true if poolA is equivalent to poolB
@@ -49,7 +49,8 @@ function computeAllRoutes(
  * @param currencyOut the output currency
  */
 export function useAllV3Routes(currencyIn?: Currency, currencyOut?: Currency): { loading: boolean; routes: Route<Currency, Currency>[] } {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
     const { pools, loading: poolsLoading } = useV3SwapPools(currencyIn, currencyOut);
 
     const [singleHopOnly] = useUserSingleHopOnly();

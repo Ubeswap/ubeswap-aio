@@ -2,22 +2,20 @@ import { isAddress } from "@ethersproject/address";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Frown } from "react-feather";
 import { useFarmingHandlers } from "../../hooks/useFarmingHandlers";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useAllTransactions } from "../../state/transactions/hooks";
 import Loader from "../Loader";
 import Modal from "../Modal";
 import { Deposit, RewardInterface, UnfarmingInterface } from "../../models/interfaces";
 import { FarmingType } from "../../models/enums";
-import { getCountdownTime } from "../../utils/time";
-import { getProgress } from "../../utils/getProgress";
 import { CheckOut } from "./CheckOut";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSortedRecentTransactions } from "../../hooks/useSortedRecentTransactions";
 import "./index.scss";
 import ModalBody from "./ModalBody";
 import PositionHeader from "./PositionHeader";
 import PositionCardBodyHeader from "./PositionCardBodyHeader";
 import PositionCardBodyStat from "./PositionCardBodyStat";
+import { useContractKit } from "@celo-tools/use-contractkit";
 // import { t, Trans } from "@lingui/macro";
 
 interface FarmingMyFarmsProps {
@@ -28,7 +26,7 @@ interface FarmingMyFarmsProps {
 }
 
 export function FarmingMyFarms({ data, refreshing, now, fetchHandler }: FarmingMyFarmsProps) {
-    const { account } = useActiveWeb3React();
+    const { address } = useContractKit();
 
     const {
         getRewardsHash,
@@ -65,7 +63,7 @@ export function FarmingMyFarms({ data, refreshing, now, fetchHandler }: FarmingM
 
     const sendNFTHandler = useCallback(
         (v) => {
-            if (!isAddress(recipient) || recipient === account) {
+            if (!isAddress(recipient) || recipient === address) {
                 return;
             }
 
@@ -76,7 +74,7 @@ export function FarmingMyFarms({ data, refreshing, now, fetchHandler }: FarmingM
 
     useEffect(() => {
         fetchHandler();
-    }, [account]);
+    }, [address]);
 
     useEffect(() => {
         setShallowPositions(data);
@@ -206,7 +204,7 @@ export function FarmingMyFarms({ data, refreshing, now, fetchHandler }: FarmingM
                     sending={sending}
                     setSending={setSending}
                     sendNFTHandler={sendNFTHandler}
-                    account={account ?? undefined}
+                    account={address ?? undefined}
                 />
             </Modal>
             {refreshing || !shallowPositions ? (

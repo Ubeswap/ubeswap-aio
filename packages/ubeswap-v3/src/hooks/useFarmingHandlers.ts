@@ -5,7 +5,6 @@ import { Interface } from "ethers/lib/utils";
 import { useCallback, useState } from "react";
 import { FARMING_CENTER, NONFUNGIBLE_POSITION_MANAGER_ADDRESSES } from "../constants/addresses";
 import { useTransactionAdder } from "../state/transactions/hooks";
-import { useActiveWeb3React } from "./web3";
 import JSBI from "jsbi";
 import { toHex } from "../lib/src";
 import { useAppSelector } from "../state/hooks";
@@ -13,11 +12,14 @@ import { GAS_PRICE_MULTIPLIER } from "./useGasPrice";
 import { TransactionResponse } from "@ethersproject/providers";
 import { DefaultFarming, DefaultFarmingWithError, GetRewardsHashInterface, GetRewardsHashInterfaceWithError } from "../models/interfaces";
 import { FarmingType } from "../models/enums";
+import { ChainId, useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 // import { t } from "@lingui/macro"
 
 export function useFarmingHandlers() {
-    const { chainId, account, library } = useActiveWeb3React();
+    const { network, address } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
+    const library = useProvider();
 
     const provider = library ? new providers.Web3Provider(library.provider) : undefined;
 
@@ -61,7 +63,7 @@ export function useFarmingHandlers() {
             },
             farmingType
         ) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             setClaimReward({ hash: null, id: null, farmingType: null });
 
@@ -80,11 +82,11 @@ export function useFarmingHandlers() {
                     ];
 
                     if (Boolean(+eternalEarned)) {
-                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [eternalRewardToken.id, account, 0, MaxUint128]));
+                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [eternalRewardToken.id, address, 0, MaxUint128]));
                     }
 
                     if (Boolean(+eternalBonusEarned)) {
-                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [eternalBonusRewardToken.id, account, 0, MaxUint128]));
+                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [eternalBonusRewardToken.id, address, 0, MaxUint128]));
                     }
 
                     result = await farmingCenterContract.multicall(callDatas, { gasPrice: gasPrice * GAS_PRICE_MULTIPLIER, gasLimit: 350000 });
@@ -92,11 +94,11 @@ export function useFarmingHandlers() {
                     callDatas = [farmingCenterInterface.encodeFunctionData("exitFarming", [[limitRewardToken.id, limitBonusRewardToken.id, pool.id, +limitStartTime, +limitEndTime], +token, true])];
 
                     if (Boolean(+limitEarned)) {
-                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [limitRewardToken.id, account, MaxUint128, 0]));
+                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [limitRewardToken.id, address, MaxUint128, 0]));
                     }
 
                     if (Boolean(+limitBonusEarned)) {
-                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [limitBonusRewardToken.id, account, MaxUint128, 0]));
+                        callDatas.push(farmingCenterInterface.encodeFunctionData("claimReward", [limitBonusRewardToken.id, address, MaxUint128, 0]));
                     }
 
                     result = await farmingCenterContract.multicall(callDatas, { gasPrice: gasPrice * GAS_PRICE_MULTIPLIER, gasLimit: 350000 });
@@ -114,13 +116,13 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     //collect rewards and claim than
     const eternalCollectRewardHandler = useCallback(
         async (token, { pool, eternalRewardToken, eternalBonusRewardToken, eternalStartTime, eternalEndTime }) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             const farmingCenterContract = new Contract(FARMING_CENTER[chainId], FARMING_CENTER_ABI, provider.getSigner());
 
@@ -135,8 +137,8 @@ export function useFarmingHandlers() {
                     [eternalRewardToken.id, eternalBonusRewardToken.id, pool.id, +eternalStartTime, +eternalEndTime],
                     +token,
                 ]);
-                const claimReward1 = farmingCenterInterface.encodeFunctionData("claimReward", [eternalRewardToken.id, account, 0, MaxUint128]);
-                const claimReward2 = farmingCenterInterface.encodeFunctionData("claimReward", [eternalBonusRewardToken.id, account, 0, MaxUint128]);
+                const claimReward1 = farmingCenterInterface.encodeFunctionData("claimReward", [eternalRewardToken.id, address, 0, MaxUint128]);
+                const claimReward2 = farmingCenterInterface.encodeFunctionData("claimReward", [eternalBonusRewardToken.id, address, 0, MaxUint128]);
 
                 let result: TransactionResponse;
 
@@ -158,19 +160,19 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     const claimReward = useCallback(
         async (tokenReward) => {
             try {
-                if (!account || !provider || !chainId) return;
+                if (!address || !provider || !chainId) return;
 
                 const farmingCenterContract = new Contract(FARMING_CENTER[chainId], FARMING_CENTER_ABI, provider.getSigner());
 
                 const MaxUint128 = toHex(JSBI.subtract(JSBI.exponentiate(JSBI.BigInt(2), JSBI.BigInt(128)), JSBI.BigInt(1)));
 
-                const result: TransactionResponse = await farmingCenterContract.claimReward(tokenReward, account, MaxUint128, MaxUint128, { gasPrice: gasPrice * GAS_PRICE_MULTIPLIER });
+                const result: TransactionResponse = await farmingCenterContract.claimReward(tokenReward, address, MaxUint128, MaxUint128, { gasPrice: gasPrice * GAS_PRICE_MULTIPLIER });
 
                 setClaimHash({ hash: result.hash, id: tokenReward });
                 addTransaction(result, {
@@ -183,13 +185,13 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     //exit from basic farming before the start
     const exitHandler = useCallback(
         async (token, { limitRewardToken, limitBonusRewardToken, pool, limitStartTime, limitEndTime }, eventType) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             setGetRewards({ hash: null, id: null, farmingType: null });
 
@@ -212,19 +214,19 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     const withdrawHandler = useCallback(
         async (token) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             setWithdrawn({ hash: null, id: null });
 
             try {
                 const farmingCenterContract = new Contract(FARMING_CENTER[chainId], FARMING_CENTER_ABI, provider.getSigner());
 
-                const result = await farmingCenterContract.withdrawToken(token, account, 0x0, {
+                const result = await farmingCenterContract.withdrawToken(token, address, 0x0, {
                     gasPrice: gasPrice * GAS_PRICE_MULTIPLIER,
                 });
 
@@ -240,12 +242,12 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     const farmHandler = useCallback(
         async (selectedNFT, { rewardToken, bonusRewardToken, pool, startTime, endTime }, eventType, selectedTier) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             setFarmed({ hash: null, id: null });
 
@@ -274,12 +276,12 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     const transferHandler = useCallback(
         async (selectedNFT) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             setTransfered({ hash: null, id: null });
 
@@ -291,7 +293,7 @@ export function useFarmingHandlers() {
                 if (selectedNFT.approved) {
                     current = selectedNFT.id;
 
-                    const result = await nonFunPosManContract["safeTransferFrom(address,address,uint256)"](account, FARMING_CENTER[chainId], selectedNFT.id, {
+                    const result = await nonFunPosManContract["safeTransferFrom(address,address,uint256)"](address, FARMING_CENTER[chainId], selectedNFT.id, {
                         gasPrice: gasPrice * GAS_PRICE_MULTIPLIER,
                     });
 
@@ -308,12 +310,12 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     const approveHandler = useCallback(
         async (selectedNFT) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             setApproved({ hash: null, id: null });
 
@@ -327,7 +329,7 @@ export function useFarmingHandlers() {
                 if (!selectedNFT.onFarmingCenter) {
                     current = selectedNFT.id;
 
-                    const transferData = nonFunPosManInterface.encodeFunctionData("safeTransferFrom(address,address,uint256)", [account, FARMING_CENTER[chainId], selectedNFT.id]);
+                    const transferData = nonFunPosManInterface.encodeFunctionData("safeTransferFrom(address,address,uint256)", [address, FARMING_CENTER[chainId], selectedNFT.id]);
 
                     const result = await nonFunPosManContract.multicall([transferData], { gasPrice: gasPrice * GAS_PRICE_MULTIPLIER });
 
@@ -344,12 +346,12 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     const sendNFTL2Handler = useCallback(
         async (recipient: string, l2TokenId: string) => {
-            if (!account || !provider || !chainId) return;
+            if (!address || !provider || !chainId) return;
 
             setSendNFTL2({ hash: null, id: null });
 
@@ -358,7 +360,7 @@ export function useFarmingHandlers() {
 
                 const approveData = farmingCenterInterface.encodeFunctionData("approve", [recipient, l2TokenId]);
 
-                const sendData = farmingCenterInterface.encodeFunctionData("safeTransferFrom(address,address,uint256)", [account, recipient, l2TokenId]);
+                const sendData = farmingCenterInterface.encodeFunctionData("safeTransferFrom(address,address,uint256)", [address, recipient, l2TokenId]);
 
                 const result = await farmingCenterContract.multicall([approveData, sendData], {
                     gasPrice: gasPrice * GAS_PRICE_MULTIPLIER,
@@ -376,7 +378,7 @@ export function useFarmingHandlers() {
                 }
             }
         },
-        [account, chainId]
+        [address, chainId]
     );
 
     return {

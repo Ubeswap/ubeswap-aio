@@ -10,7 +10,7 @@ import { Token } from "@uniswap/sdk-core";
 import Toggle from "../Toggle";
 import "./index.scss";
 import PositionsSelect from "../../components/PoolInfoChartToolbar/PositionsSelect";
-import { useActiveWeb3React } from "../../hooks/web3";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 interface FeeChartRangeInputProps {
     fetchedData:
@@ -39,7 +39,7 @@ interface FeeChartRangeInputProps {
 export default function FeeChartRangeInput({ fetchedData, refreshing, span, type, token, token1, token0, setToken, positions, selected, setSelected }: FeeChartRangeInputProps) {
     const ref = useRef<HTMLDivElement>(null);
 
-    const { account } = useActiveWeb3React();
+    const { address } = useContractKit();
 
     const formattedData: FeeChart = useMemo(() => {
         if (!fetchedData || typeof fetchedData === "string")
@@ -128,7 +128,7 @@ export default function FeeChartRangeInput({ fetchedData, refreshing, span, type
                 }),
             };
         }
-    }, [fetchedData, token, account]);
+    }, [fetchedData, token, address]);
 
     return (
         <div className={"w-100 fee-chart pt-1 mxs_p-0"} ref={ref}>
@@ -144,7 +144,7 @@ export default function FeeChartRangeInput({ fetchedData, refreshing, span, type
                                 <Toggle isActive={!!token} toggle={() => setToken(token === ChartToken.TOKEN0 ? 1 : 0)} checked={token0?.symbol} unchecked={token1?.symbol} />
                             </div>
                         )}
-                        {type === ChartType.PRICE && account && (
+                        {type === ChartType.PRICE && address && (
                             <div className={"fee-chart__toggle"}>
                                 <PositionsSelect positions={positions} selected={selected} setSelected={setSelected} />
                             </div>

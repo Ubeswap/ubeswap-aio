@@ -32,12 +32,12 @@ import usePrevious from "../../hooks/usePrevious";
 
 import ReactGA from "react-ga";
 import { useAppSelector } from "../../state/hooks";
-import { useActiveWeb3React } from "../../hooks/web3";
 import useTheme from "../../hooks/useTheme";
 import { WrappedCurrency } from "../../models/types";
 import { GAS_PRICE_MULTIPLIER } from "../../hooks/useGasPrice";
 import Card from "../../shared/components/Card/Card";
 import { isMobileOnly } from "react-device-detect";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 const DEFAULT_REMOVE_V3_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100);
 
@@ -84,7 +84,9 @@ function Remove({ tokenId }: { tokenId: BigNumber }) {
     // burn state
     const { percent } = useBurnV3State();
 
-    const { account, chainId, library } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
     const theme = useTheme();
 
     const derivedInfo = useDerivedV3BurnInfo(position, receiveWETH);

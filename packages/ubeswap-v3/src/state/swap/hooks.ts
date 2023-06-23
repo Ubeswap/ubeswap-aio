@@ -8,7 +8,6 @@ import { Currency, CurrencyAmount, Percent, TradeType } from "@uniswap/sdk-core"
 import { Trade as V2Trade } from "@uniswap/v2-sdk";
 import { ParsedQs } from "qs";
 import { useCallback, useEffect, useState } from "react";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { useCurrency } from "../../hooks/Tokens";
 import useSwapSlippageTolerance from "../../hooks/useSwapSlippageTolerance";
 import useParsedQueryString from "../../hooks/useParsedQueryString";
@@ -20,6 +19,7 @@ import { SwapState } from "./reducer";
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
 
 import AlgebraConfig from "../../algebra.config";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 export function useSwapState(): AppState["swap"] {
     return useAppSelector((state) => state.swap);
@@ -33,7 +33,8 @@ export function useSwapActionHandlers(): {
 } {
     const dispatch = useAppDispatch();
 
-    const { chainId } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
 
     let symbol: string;
 
@@ -114,7 +115,7 @@ export function useDerivedSwapInfo(): {
     toggledTrade: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType> | undefined;
     allowedSlippage: Percent;
 } {
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
 
     const {
         independentField,
@@ -271,7 +272,8 @@ export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: number):
 
 // updates the swap state to use the defaults for a given network
 export function useDefaultsFromURLSearch(): { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
     const dispatch = useAppDispatch();
     const parsedQs = useParsedQueryString();
     const [result, setResult] = useState<{ inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined>();

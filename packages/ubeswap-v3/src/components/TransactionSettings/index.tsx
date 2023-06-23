@@ -7,8 +7,8 @@ import { AutoColumn } from "../Column";
 import { RowBetween, RowFixed } from "../Row";
 import { DEFAULT_DEADLINE_FROM_NOW } from "../../constants/misc";
 import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from "../../state/user/hooks";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { Input, Option, OptionCustom, SlippageEmojiContainer } from "./styled";
+import { ChainId, useContractKit } from "@celo-tools/use-contractkit";
 
 enum SlippageError {
     InvalidInput = "InvalidInput",
@@ -23,7 +23,8 @@ interface TransactionSettingsProps {
 }
 
 export default function TransactionSettings({ placeholderSlippage }: TransactionSettingsProps) {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const chainId = network.chainId as unknown as ChainId;
 
     const userSlippageTolerance = useUserSlippageTolerance();
     const setUserSlippageTolerance = useSetUserSlippageTolerance();

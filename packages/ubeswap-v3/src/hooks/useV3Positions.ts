@@ -5,7 +5,7 @@ import { BigNumber } from "@ethersproject/bignumber";
 import { useFarmingSubgraph } from "./useFarmingSubgraph";
 import { PositionPool } from "../models/interfaces";
 import usePrevious, { usePreviousNonEmptyArray } from "./usePrevious";
-import { useActiveWeb3React } from "./web3";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 interface UseV3PositionsResults {
     loading: boolean;
@@ -20,7 +20,7 @@ function useV3PositionsFromTokenIds(tokenIds: BigNumber[] | undefined): UseV3Pos
     const loading = useMemo(() => results.some(({ loading }) => loading), [results]);
     const error = useMemo(() => results.some(({ error }) => error), [results]);
 
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
 
     const prevAccount = usePrevious(account);
 

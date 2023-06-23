@@ -1,7 +1,6 @@
 import { POOL_DEPLOYER_ADDRESS } from "../constants/addresses";
 import { Currency, Token } from "@uniswap/sdk-core";
 import { useMemo } from "react";
-import { useActiveWeb3React } from "./web3";
 import { useMultipleContractSingleData } from "../state/multicall/hooks";
 
 import { Pool } from "../lib/src";
@@ -11,6 +10,7 @@ import { computePoolAddress } from "./computePoolAddress";
 import { useInternet } from "./useInternet";
 import { useToken } from "./Tokens";
 import { usePreviousNonEmptyArray, usePreviousNonErroredArray } from "./usePrevious";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 const POOL_STATE_INTERFACE = new Interface(abi);
 
@@ -22,7 +22,8 @@ export enum PoolState {
 }
 
 export function usePools(poolKeys: [Currency | undefined, Currency | undefined][]): [PoolState, Pool | null][] {
-    const { chainId } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
 
     const transformed: ([Token, Token] | null)[] = useMemo(() => {
         return poolKeys.map(([currencyA, currencyB]) => {

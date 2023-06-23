@@ -2,7 +2,6 @@ import ApeModeQueryParamReader from "../hooks/useApeModeQueryParamReader";
 import { Route, Switch, useHistory, useLocation, Redirect } from "react-router-dom";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Popups from "../components/Popups";
-import Web3ReactManager from "../components/Web3ReactManager";
 import DarkModeQueryParamReader from "../theme/DarkModeQueryParamReader";
 import { RedirectDuplicateTokenIdsNew } from "./AddLiquidity/redirects";
 import RemoveLiquidityV3 from "./RemoveLiquidity/V3";
@@ -13,7 +12,6 @@ import { useInternet } from "../hooks/useInternet";
 import { useIsNetworkFailed } from "../hooks/useIsNetworkFailed";
 import Loader from "../components/Loader";
 import GoogleAnalyticsReporter from "../components/analytics/GoogleAnalyticsReporter";
-import { useActiveWeb3React } from "../hooks/web3";
 import { GlobalStyle, Marginer, NetworkFailedCard } from "./styled";
 import Footer from "../components/Footer";
 // import { t, Trans } from "@lingui/macro";
@@ -24,6 +22,7 @@ import AlgebraConfig from "../algebra.config";
 import styled from "styled-components/macro";
 import PoolBackground from "../assets/images/background-pool.jpg";
 import FarmBackground from "../assets/images/background-farm.jpg";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 const AddLiquidity = React.lazy(() => import("./AddLiquidity"));
 const FarmingPage = React.lazy(() => import("./Farming/FarmingPage"));
@@ -59,7 +58,7 @@ export default function App() {
             return 60;
         },
     });
-    const { account } = useActiveWeb3React();
+    const { address: account } = useContractKit();
     const networkFailed = useIsNetworkFailed();
     const [page, setPage] = useState("pool");
 
@@ -91,66 +90,64 @@ export default function App() {
             <Route component={ApeModeQueryParamReader} />
             <Route component={GoogleAnalyticsReporter} />
             <BackgroundImageContainer page={page}>
-                <Web3ReactManager>
-                    <>
-                        <UbeswapHeader
-                            darkMode={true}
-                            showToggleDarkMode={false}
-                            enableUrlWarning={false}
-                            onUpdateProvider={async (provider) => {
-                                // console.log(await provider.listAccounts());
-                            }}
-                        />
-                        <div className={"app-body w-100 ph-1 pt-3 mh-a pb-4 mm_pt-5"} style={{ zIndex: 1, marginBottom: "5rem" }}>
-                            <CautionModal />
-                            {/* {!internet && (
+                <>
+                    <UbeswapHeader
+                        darkMode={true}
+                        showToggleDarkMode={false}
+                        enableUrlWarning={false}
+                        onUpdateProvider={async (provider) => {
+                            // console.log(await provider.listAccounts());
+                        }}
+                    />
+                    <div className={"app-body w-100 ph-1 pt-3 mh-a pb-4 mm_pt-5"} style={{ zIndex: 1, marginBottom: "5rem" }}>
+                        <CautionModal />
+                        {/* {!internet && (
                             <InternetError>
                                 <h2>Network ERROR</h2>
                             </InternetError>
                         )} */}
-                            {networkFailed && (
-                                <NetworkFailedCard>
-                                    <div style={{ display: "flex" }}>
-                                        <Loader
-                                            style={{
-                                                display: "inline-block",
-                                                margin: "auto 8px auto 0",
-                                            }}
-                                            stroke={"white"}
-                                        />
-                                        <span>{`Connecting to ${AlgebraConfig.CHAIN_PARAMS.chainName}`}</span>
-                                    </div>
-                                </NetworkFailedCard>
-                            )}
-                            <div className={"pb-2 mm_pb-2 mxs_pb-2 maw-1180 w-100"} style={{ zIndex: 2 }}>
-                                <Popups />
-                                <React.Suspense fallback={<p>Loading...</p>}>
-                                    <Switch>
-                                        <Route strict path="/info" component={InfoPage} />
+                        {networkFailed && (
+                            <NetworkFailedCard>
+                                <div style={{ display: "flex" }}>
+                                    <Loader
+                                        style={{
+                                            display: "inline-block",
+                                            margin: "auto 8px auto 0",
+                                        }}
+                                        stroke={"white"}
+                                    />
+                                    <span>{`Connecting to ${AlgebraConfig.CHAIN_PARAMS.chainName}`}</span>
+                                </div>
+                            </NetworkFailedCard>
+                        )}
+                        <div className={"pb-2 mm_pb-2 mxs_pb-2 maw-1180 w-100"} style={{ zIndex: 2 }}>
+                            <Popups />
+                            <React.Suspense fallback={<p>Loading...</p>}>
+                                <Switch>
+                                    <Route strict path="/info" component={InfoPage} />
 
-                                        <Route strict path="/farm" component={FarmingPage} />
+                                    <Route strict path="/farm" component={FarmingPage} />
 
-                                        {/* <Route exact strict path="/send" component={RedirectPathToSwapOnly} /> */}
-                                        {/* <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
-                                        {/* <Route exact strict path="/swap" component={Swap} /> */}
+                                    {/* <Route exact strict path="/send" component={RedirectPathToSwapOnly} /> */}
+                                    {/* <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
+                                    {/* <Route exact strict path="/swap" component={Swap} /> */}
 
-                                        <Route exact strict path="/pool" component={PoolPage} />
-                                        <Route exact strict path="/pool/:tokenId" component={PositionPage} />
+                                    <Route exact strict path="/pool" component={PoolPage} />
+                                    <Route exact strict path="/pool/:tokenId" component={PositionPage} />
 
-                                        <Route exact strict path="/add/:currencyIdA?/:currencyIdB?/:step?" component={RedirectDuplicateTokenIdsNew} />
+                                    <Route exact strict path="/add/:currencyIdA?/:currencyIdB?/:step?" component={RedirectDuplicateTokenIdsNew} />
 
-                                        <Route exact strict path="/increase/:currencyIdA?/:currencyIdB?/:tokenId?" component={AddLiquidity} />
-                                        <Route exact strict path="/remove/:tokenId" component={RemoveLiquidityV3} />
+                                    <Route exact strict path="/increase/:currencyIdA?/:currencyIdB?/:tokenId?" component={AddLiquidity} />
+                                    <Route exact strict path="/remove/:tokenId" component={RemoveLiquidityV3} />
 
-                                        <Redirect to={"/pool"} />
-                                    </Switch>
-                                </React.Suspense>
-                                <Marginer />
-                            </div>
+                                    <Redirect to={"/pool"} />
+                                </Switch>
+                            </React.Suspense>
+                            <Marginer />
                         </div>
-                        <Footer />
-                    </>
-                </Web3ReactManager>
+                    </div>
+                    <Footer />
+                </>
             </BackgroundImageContainer>
         </ErrorBoundary>
     );

@@ -1,11 +1,12 @@
+import { useContractKit } from "@celo-tools/use-contractkit";
 import { useCallback, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
-import { useActiveWeb3React } from "../../hooks/web3";
 import { AppState } from "../index";
 import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } from "./actions";
 
 export function useBlockNumber(): number | undefined {
-    const { chainId } = useActiveWeb3React();
+    const { network } = useContractKit();
+    const { chainId } = network;
 
     return useAppSelector((state: AppState) => state.application.blockNumber[chainId ?? -1]);
 }

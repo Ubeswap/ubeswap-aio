@@ -1,5 +1,4 @@
 import { useBlockNumber } from "../state/application/hooks";
-import { useActiveWeb3React } from "./web3";
 
 import useInterval from "./useInterval";
 import { useState } from "react";

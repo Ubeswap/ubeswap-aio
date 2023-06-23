@@ -1,10 +1,10 @@
-import { Text } from 'rebass'
-import styled, { keyframes } from 'styled-components/macro'
-import { AutoColumn } from '../../components/Column'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { ButtonPrimary } from '../../components/Button'
-import Badge from '../../components/Badge'
-import { TYPE } from '../../theme'
+import { Text } from "rebass";
+import styled, { keyframes } from "styled-components/macro";
+import { AutoColumn } from "../../components/Column";
+import { RowBetween, RowFixed } from "../../components/Row";
+import { ButtonPrimary } from "../../components/Button";
+import Badge from "../../components/Badge";
+import { TYPE } from "../../theme";
 
 const loadingAnimation = keyframes`
     0% {
@@ -13,18 +13,18 @@ const loadingAnimation = keyframes`
     100% {
         background-position: 0 50%;
     }
-`
+`;
 export const Wrapper = styled.div`
     position: relative;
     padding: 20px;
-`
+`;
 export const ClickableText = styled(Text)`
     :hover {
         cursor: pointer;
     }
 
     color: ${({ theme }) => theme.primary1};
-`
+`;
 export const MaxButton = styled.button<{ width?: string }>`
     padding: 0.5rem 1rem;
     background-color: ${({ theme }) => theme.primary5};
@@ -48,28 +48,28 @@ export const MaxButton = styled.button<{ width?: string }>`
         border: 1px solid ${({ theme }) => theme.primary1};
         outline: none;
     }
-`
+`;
 export const Dots = styled.span`
     &::after {
         display: inline-block;
         animation: ellipsis 1.25s infinite;
-        content: '.';
+        content: ".";
         width: 1em;
         text-align: left;
     }
 
     @keyframes ellipsis {
         0% {
-            content: '.';
+            content: ".";
         }
         33% {
-            content: '..';
+            content: "..";
         }
         66% {
-            content: '...';
+            content: "...";
         }
     }
-`
+`;
 export const LoadingRows = styled.div`
     display: grid;
     min-width: 75%;
@@ -96,7 +96,7 @@ export const LoadingRows = styled.div`
         grid-column: 3 / 4;
         margin-bottom: 2em;
     }
-`
+`;
 
 //index
 export const PageWrapper = styled(AutoColumn)`
@@ -111,7 +111,7 @@ export const PageWrapper = styled(AutoColumn)`
     ${({ theme }) => theme.mediaWidth.upToSmall`
     max-width: 500px;
   `};
-`
+`;
 export const TitleRow = styled(RowBetween)`
     color: ${({ theme }) => theme.text2};
     margin-top: 1rem;
@@ -122,7 +122,7 @@ export const TitleRow = styled(RowBetween)`
     width: 100%;
     padding: 1rem;
   `};
-`
+`;
 export const ButtonRow = styled(RowFixed)`
     & > *:not(:last-child) {
         margin-left: 8px;
@@ -139,7 +139,7 @@ export const ButtonRow = styled(RowFixed)`
       margin-top: 1rem;
     }
   `};
-`
+`;
 export const NoLiquidity = styled.div`
     align-items: center;
     display: flex;
@@ -148,7 +148,7 @@ export const NoLiquidity = styled.div`
     margin: auto;
     max-width: 300px;
     min-height: 25vh;
-`
+`;
 export const ResponsiveButtonPrimary = styled(ButtonPrimary)`
     border-radius: 12px;
     padding: 6px 8px;
@@ -159,14 +159,14 @@ export const ResponsiveButtonPrimary = styled(ButtonPrimary)`
     width: 100%;
     margin: 0;
   `};
-`
+`;
 export const MigrateButtonPrimary = styled(ResponsiveButtonPrimary)`
     margin-right: 1rem;
 
     ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
   `}
-`
+`;
 export const MainContentWrapper = styled.main`
     border-radius: 20px;
     display: flex;
@@ -177,7 +177,7 @@ export const MainContentWrapper = styled.main`
     ${({ theme }) => theme.mediaWidth.upToSmall`
         padding: 1rem;
     `}
-`
+`;
 export const FilterPanelWrapper = styled.div`
     width: 100%;
     display: flex;
@@ -185,17 +185,17 @@ export const FilterPanelWrapper = styled.div`
     gap: 2rem;
     text-align: start;
     padding-left: 2rem;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 
     label {
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
     }
 
     ${({ theme }) => theme.mediaWidth.upToSmall`
     justify-content: center;
     padding-left: unset;
   `}
-`
+`;
 
 //PositionPage
 export const PositionPageWrapper = styled.div`
@@ -222,24 +222,24 @@ export const PositionPageWrapper = styled.div`
     min-width: 340px;
     max-width: 340px;
   `};
-`
+`;
 export const BadgeText = styled.div`
     font-weight: 500;
     font-size: 14px;
-`
+`;
 export const Label = styled(({ ...props }) => <TYPE.label {...props} />)<{ end?: boolean }>`
     display: flex;
     font-size: 16px;
-    justify-content: ${({ end }) => (end ? 'flex-end' : 'flex-start')};
+    justify-content: ${({ end }) => (end ? "flex-end" : "flex-start")};
     align-items: center;
-`
+`;
 export const ExtentsText = styled.span`
     color: ${({ theme }) => theme.text2};
     font-size: 14px;
     text-align: center;
     margin-right: 4px;
     font-weight: 500;
-`
+`;
 export const HoverText = styled(TYPE.main)`
     text-decoration: none;
     color: white;
@@ -248,11 +248,11 @@ export const HoverText = styled(TYPE.main)`
         color: ${({ theme }) => theme.text1};
         text-decoration: none;
     }
-`
+`;
 export const DoubleArrow = styled.span`
     color: ${({ theme }) => theme.text3};
     margin: 0 1rem;
-`
+`;
 export const ResponsiveRow = styled(RowBetween)`
     ${({ theme }) => theme.mediaWidth.upToMedium`
     flex-direction: column;
@@ -260,7 +260,7 @@ export const ResponsiveRow = styled(RowBetween)`
     row-gap: 16px;
     width: 100%:
   `};
-`
+`;
 export const PositionPageButtonPrimary = styled(ButtonPrimary)`
     border-radius: 12px;
     padding: 6px 8px;
@@ -273,20 +273,20 @@ export const PositionPageButtonPrimary = styled(ButtonPrimary)`
     margin-right: 0;
      width: 49%;
   `};
-`
+`;
 export const NFTGrid = styled.div`
     display: grid;
-    grid-template: 'overlap';
+    grid-template: "overlap";
     min-height: 400px;
-`
+`;
 export const NFTCanvas = styled.canvas`
     grid-area: overlap;
-`
+`;
 export const NFTImage = styled.img`
     grid-area: overlap;
     height: 400px;
     z-index: 1;
-`
+`;
 export const RowFixedStyled = styled(RowFixed)`
     ${({ theme }) => theme.mediaWidth.upToExtraSmall`
    width: 100%;
@@ -296,24 +296,24 @@ export const RowFixedStyled = styled(RowFixed)`
       margin-bottom: 1rem;
     }
   `}
-`
+`;
 export const RowFixedStyledButtons = styled(RowFixedStyled)`
     ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     flex-direction: unset;
     gap: .5rem;
   `}
-`
+`;
 export const FeeBadge = styled(Badge)`
     ${({ theme }) => theme.mediaWidth.upToExtraSmall`
       margin-right: 0!important;
       margin-top: 1rem;
     `}
-`
+`;
 export const PriceRow = styled(RowBetween)`
     ${({ theme }) => theme.mediaWidth.upToSmall`
       flex-direction: column;
     `}
-`
+`;
 export const LoadingMock = styled.div`
     display: flex;
     align-items: center;
@@ -328,7 +328,7 @@ export const LoadingMock = styled.div`
         width: 100%;
         margin-top: 1rem;
   `}
-`
+`;
 
 //FilterPanelItem
 export const FilterPanelItemWrapper = styled.div`
@@ -340,4 +340,4 @@ export const FilterPanelItemWrapper = styled.div`
            text-align: center;
         `}
     }
-`
+`;

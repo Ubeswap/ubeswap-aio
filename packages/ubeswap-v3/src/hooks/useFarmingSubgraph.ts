@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useActiveWeb3React } from "./web3";
 import { Contract, providers } from "ethers";
 import ERC20_ABI from "../abis/erc20.json";
 import NON_FUN_POS_MAN from "../abis/non-fun-pos-man.json";
@@ -44,9 +43,12 @@ import { fetchEternalFarmTVL, fetchLimitFarmAPR, fetchLimitFarmTVL } from "../ut
 import { useEthPrices } from "./useEthPrices";
 
 import AlgebraConfig from "../algebra.config";
+import { useContractKit, useProvider } from "@celo-tools/use-contractkit";
 
 export function useFarmingSubgraph() {
-    const { chainId, account, library } = useActiveWeb3React();
+    const { address: account, network } = useContractKit();
+    const { chainId } = network;
+    const library = useProvider();
     const { dataClient, farmingClient } = useClients();
 
     const [positionsForPool, setPositionsForPool] = useState<Position[] | null>(null);

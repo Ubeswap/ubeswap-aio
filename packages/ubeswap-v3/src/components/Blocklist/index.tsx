@@ -1,6 +1,5 @@
 import { ReactNode, useMemo } from "react";
-import { useActiveWeb3React } from "../../hooks/web3";
-import { Trans } from "@lingui/macro";
+import { useContractKit } from "@celo-tools/use-contractkit";
 
 // SDN OFAC addresses
 const BLOCKED_ADDRESSES: string[] = [
@@ -12,8 +11,8 @@ const BLOCKED_ADDRESSES: string[] = [
 ];
 
 export default function Blocklist({ children }: { children: ReactNode }) {
-    const { account } = useActiveWeb3React();
-    const blocked: boolean = useMemo(() => Boolean(account && BLOCKED_ADDRESSES.indexOf(account) !== -1), [account]);
+    const { address } = useContractKit();
+    const blocked: boolean = useMemo(() => Boolean(address && BLOCKED_ADDRESSES.indexOf(address) !== -1), [address]);
     if (blocked) {
         return <div>Blocked address</div>;
     }
