@@ -35,6 +35,10 @@ const MenuItem = styled(NavLink)`
   padding: 0.5rem 0.5rem;
   text-decoration: none;
   color: ${({ theme }) => theme.text2};
+  &.disabled {
+    color: ${({ theme }) => theme.text3};
+    pointer-events: none;
+  }
   :hover {
     color: ${({ theme }) => theme.text1};
     cursor: pointer;
@@ -80,6 +84,7 @@ export default function PoolMenuGroup() {
             V2
           </MenuItem>
           <MenuItem
+            className="disabled"
             id="link"
             to={'#'}
             onClick={(e) => {

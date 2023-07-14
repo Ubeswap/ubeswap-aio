@@ -520,6 +520,7 @@ export default function Header({
               <StyledSubMenuItem>
                 <StyledNavLink
                   id={`stake-drawer-nav-link`}
+                  className="disabled"
                   to={'/pool'}
                   onClick={(e) => {
                     e.preventDefault()
@@ -614,6 +615,7 @@ export default function Header({
               </StyledSubMenuItem>
               <StyledSubMenuItem>
                 <StyledNavLink
+                  className="disabled"
                   id={'charts-analytics-drawer-nav-link'}
                   to={'#'}
                   onClick={(e) => {
