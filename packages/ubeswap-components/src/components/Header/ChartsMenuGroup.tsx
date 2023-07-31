@@ -48,8 +48,12 @@ const MenuItem = styled(ExternalLink)`
 const MenuItemInternalLink = styled(NavLink)`
   flex: 1;
   padding: 0.5rem 0.5rem;
-  color: ${({ theme }) => theme.text2} !important;
+  color: ${({ theme }) => theme.text2};
   text-decoration: none !important;
+  &.disabled {
+    pointer-events: none;
+    color: ${({ theme }) => theme.text3};
+  }
   :hover {
     color: ${({ theme }) => theme.text1} !important;
     cursor: pointer;
@@ -76,6 +80,7 @@ export default function ChartsMenuGroup() {
             V2 Analytics
           </MenuItem>
           <MenuItemInternalLink
+            className="disabled"
             id="link"
             to={'#'}
             onClick={(e) => {
